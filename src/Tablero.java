@@ -4,10 +4,12 @@ import java.util.Random;
 public class Tablero {
 
     private Square[][] laberinto;
-    private int coordenadaXCamino;
-    private int coordenadaYCamino;
+    private int coordenadaICamino = 0;
+    private int coordenadaJCamino = 0;
     private String opcionAnterior = "ARRIBA";
     private ArrayList<int[]> posicionesCamino;
+
+    private boolean[] puedeGirar;
 
     private int size = 10;
 
@@ -15,6 +17,7 @@ public class Tablero {
 
         laberinto = new Square[this.size][this.size];
         this.posicionesCamino = new ArrayList<>();
+        this.puedeGirar = new boolean[this.size];
         this.inical();
 
     }
@@ -22,74 +25,91 @@ public class Tablero {
     public void inical() {
 
         for (int i = 0; i < this.size; i++) {
+            this.puedeGirar[i] = false;
             for (int j = 0; j < this.size; j++) {
-                this.laberinto[i][j] = Square.BOARD;
+                this.laberinto[i][j] = Square.PARED;
             }
         }
 
-        Random randomOpcion = new Random();
+        Random randomInicial = new Random();
 
-        String[] opciones = { "ARRIBA", "ABAJO", "IZQUIERDA", "DERECHA" };
+        coordenadaJCamino = randomInicial.nextInt(this.size);
+        this.laberinto[this.coordenadaICamino][this.coordenadaJCamino] = Square.CAMINO;
 
         while (true) {
 
-            if (this.coordenadaXCamino == this.size - 1 ||
-                    this.coordenadaYCamino == this.size - 1) {
+            if (this.coordenadaICamino == this.size - 1 ||
+                    this.coordenadaJCamino == this.size - 1) {
                 break;
             }
 
-            int seleccion = randomOpcion.nextInt(opciones.length);
-
-            elegirDireccion(opciones[seleccion]);
+            construirCamino();
+            System.out.println("-------------------------------------------");
+            print();
         }
+
+    }
+
+    /**
+     * @return
+     */
+    private void construirCamino() {
+        Random randomDireccion = new Random();
+
+        // 1: subir, 2: girar izquierda, 3: bajar, 4: girar derecha
+        int opcion = randomDireccion.nextInt(this.size);
+
+        switch (opcion) {
+            case 1:
+                if (construir(coordenadaICamino - 1, coordenadaJCamino))
+                    coordenadaICamino--;
+                break;
+            case 2:
+                if (construir(coordenadaICamino, coordenadaJCamino +1))
+                    coordenadaICamino--;
+                break;
+            case 3:
+                if (construir(coordenadaICamino + 1, coordenadaJCamino))
+                    coordenadaICamino--;
+                break;
+
+            case 4:
+                if (construir(coordenadaICamino, coordenadaJCamino -1))
+                    coordenadaICamino--;
+                break;
+
+            default:
+                break;
+        }
+        this.laberinto[coordenadaICamino][coordenadaJCamino] = Square.CAMINO;
+
+    }
+
+    private boolean construir(int i, int j) {
+        s
 
     }
 
     public void elegirDireccion(String opcion) {
 
         switch (opcion) {
-
             case "ARRIBA":
 
-                if (!opcionAnterior.equals("ABAJO"))
-                    generalCamino(-1, 0, "ARRIBA");
-
                 break;
+
             case "ABAJO":
-                if (!opcionAnterior.equals("ARRIBA"))
-                    generalCamino(+1, 0, "ABAJO");
 
                 break;
             case "IZQUIERDA":
-                if (!opcionAnterior.equals("DERECHA"))
-                    generalCamino(0, -1, "IZQUIERDA");
 
                 break;
+
             case "DERECHA":
-                if (!opcionAnterior.equals("IZQUIERDA") || !opcionAnterior.equals("ARRIBA"))
-                    generalCamino(0, +1, "DERECHA");
+                break;
 
+            default:
                 break;
         }
-
-    }
-
-    public void generalCamino(int x, int y, String opcion) {
-
-        this.coordenadaXCamino += x;
-        if (this.coordenadaXCamino < 0 || this.coordenadaXCamino >= this.size) {
-            this.coordenadaXCamino -= x;
-        }
-        this.coordenadaYCamino += y;
-        if (this.coordenadaYCamino < 0 || this.coordenadaYCamino >= this.size) {
-            this.coordenadaYCamino -= y;
-        }
-        else {
-            this.laberinto[this.coordenadaXCamino][this.coordenadaYCamino] = Square.CAMINO;
-            posicionesCamino.add(new int[]{x,y});
-        }
-
-        this.opcionAnterior = opcion;
 
     }
 
