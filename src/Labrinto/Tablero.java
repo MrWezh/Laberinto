@@ -1,3 +1,5 @@
+package Labrinto;
+
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -86,7 +88,7 @@ public class Tablero {
     }
 
     private boolean construir(int i, int j) {
-        s
+        return false;
 
     }
 

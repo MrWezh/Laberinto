@@ -1,4 +1,4 @@
-
+package Labrinto;
 public enum Square {
     
     BOARD,
