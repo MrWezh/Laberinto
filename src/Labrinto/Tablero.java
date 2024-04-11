@@ -91,7 +91,7 @@ public class Tablero {
 
         if (i < 0 || i >= this.size || j < 0 || j >= this.size){return false;}
 
-        else if (examinarCasillas()) {
+        else if (examinarCasillas(i, j)) {
             return true;
         }
         return false;
@@ -99,19 +99,19 @@ public class Tablero {
     }
 
 
-    private boolean examinarCasillas(){
+    private boolean examinarCasillas(int i, int j){
 
         int contador = 0; 
 
         if (j - 1 >= 0&&this.laberinto[i][j-1] == Square.CAMINO){contador++;}
-        if (j + 1 < y&&this.laberinto[i][j+1] == Square.CAMINO){contador++;}
+        if (j + 1 < this.size&&this.laberinto[i][j+1] == Square.CAMINO){contador++;}
         if (i - 1 >= 0&&this.laberinto[i-1][j] == Square.CAMINO){contador++;}
-        if (i + 1 < x&&this.laberinto[i+1][j] == Square.CAMINO){contador++;}
+        if (i + 1 < this.size&&this.laberinto[i+1][j] == Square.CAMINO){contador++;}
 
         if (j - 1 >= 0 && i - 1 >= 0&&this.laberinto[i-1][j-1] == Square.CAMINO){contador++;}
-        if (j + 1  < y && i - 1 >= 0&&this.laberinto[i-1][j+1] == Square.CAMINO){contador++;}
-        if (j - 1 >= 0 && i + 1 < x&&this.laberinto[i+1][j-1] == Square.CAMINO){contador++;}
-        if (j + 1 < y && i + 1 < x&&this.laberinto[i+1][j+1] == Square.CAMINO){contador++;}
+        if (j + 1  < this.size && i - 1 >= 0&&this.laberinto[i-1][j+1] == Square.CAMINO){contador++;}
+        if (j - 1 >= 0 && i + 1 < this.size&&this.laberinto[i+1][j-1] == Square.CAMINO){contador++;}
+        if (j + 1 < this.size && i + 1 < this.size&&this.laberinto[i+1][j+1] == Square.CAMINO){contador++;}
 
         if (contador <= 2){return true; }
         else return false; 
