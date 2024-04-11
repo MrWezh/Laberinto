@@ -35,9 +35,9 @@ public class Tablero {
             }
         }
 
-       // Random randomInicial = new Random();
+      // Random randomInicial = new Random();
 
-      //  coordenadaJCamino = randomInicial.nextInt(this.size);
+      //coordenadaJCamino = randomInicial.nextInt(this.size);
         this.laberinto[this.coordenadaICamino][this.coordenadaJCamino] = Square.CAMINO;
 
         this.construirCamino();
