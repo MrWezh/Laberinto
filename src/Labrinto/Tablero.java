@@ -75,6 +75,8 @@ public class Tablero {
                 break;
         }
         this.laberinto[coordenadaICamino][coordenadaJCamino] = Square.CAMINO;
+        int[] e = {coordenadaICamino, coordenadaJCamino};
+        this.posicionesCamino.add(e);
 
         if (this.coordenadaICamino != this.size - 1&&limiteGeneralCaminos != this.size*100) {
            // System.out.println("-------------------------------------------");
