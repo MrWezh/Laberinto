@@ -88,8 +88,33 @@ public class Tablero {
     }
 
     private boolean construir(int i, int j) {
+
+        if (i < 0 || i >= this.size || j < 0 || j >= this.size){return false;}
+
+        else if (examinarCasillas()) {
+            return true;
+        }
         return false;
 
+    }
+
+
+    private boolean examinarCasillas(){
+
+        int contador = 0; 
+
+        if (j - 1 >= 0&&this.laberinto[i][j-1] == Square.CAMINO){contador++;}
+        if (j + 1 < y&&this.laberinto[i][j+1] == Square.CAMINO){contador++;}
+        if (i - 1 >= 0&&this.laberinto[i-1][j] == Square.CAMINO){contador++;}
+        if (i + 1 < x&&this.laberinto[i+1][j] == Square.CAMINO){contador++;}
+
+        if (j - 1 >= 0 && i - 1 >= 0&&this.laberinto[i-1][j-1] == Square.CAMINO){contador++;}
+        if (j + 1  < y && i - 1 >= 0&&this.laberinto[i-1][j+1] == Square.CAMINO){contador++;}
+        if (j - 1 >= 0 && i + 1 < x&&this.laberinto[i+1][j-1] == Square.CAMINO){contador++;}
+        if (j + 1 < y && i + 1 < x&&this.laberinto[i+1][j+1] == Square.CAMINO){contador++;}
+
+        if (contador <= 2){return true; }
+        else return false; 
     }
 
     public void elegirDireccion(String opcion) {
