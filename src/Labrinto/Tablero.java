@@ -40,8 +40,7 @@ public class Tablero {
 
         while (true) {
 
-            if (this.coordenadaICamino == this.size - 1 ||
-                    this.coordenadaJCamino == this.size - 1) {
+            if (this.coordenadaICamino == this.size - 1) {
                 break;
             }
 
@@ -68,16 +67,16 @@ public class Tablero {
                 break;
             case 2:
                 if (construir(coordenadaICamino, coordenadaJCamino +1))
-                    coordenadaICamino--;
+                    coordenadaJCamino++;
                 break;
             case 3:
                 if (construir(coordenadaICamino + 1, coordenadaJCamino))
-                    coordenadaICamino--;
+                    coordenadaICamino++;
                 break;
 
             case 4:
                 if (construir(coordenadaICamino, coordenadaJCamino -1))
-                    coordenadaICamino--;
+                    coordenadaJCamino--;
                 break;
 
             default:
@@ -94,7 +93,7 @@ public class Tablero {
         else if (examinarCasillas(i, j)) {
             return true;
         }
-        return false;
+        else return false;
 
     }
 
