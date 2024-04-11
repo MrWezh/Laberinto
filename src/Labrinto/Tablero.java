@@ -138,6 +138,13 @@ public class Tablero {
             }
             System.out.println();
         }
+
+
+        for (int[] a : posicionesCamino) {
+            for (int i = 0; i < a.length; i++) {
+                System.out.print(a[i]);
+            }System.out.println();
+        }
     }
 
 }
