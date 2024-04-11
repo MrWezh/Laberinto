@@ -38,17 +38,7 @@ public class Tablero {
         coordenadaJCamino = randomInicial.nextInt(this.size);
         this.laberinto[this.coordenadaICamino][this.coordenadaJCamino] = Square.CAMINO;
 
-        while (true) {
-
-            if (this.coordenadaICamino == this.size - 1) {
-                break;
-            }
-
-            construirCamino();
-            System.out.println("-------------------------------------------");
-            print();
-        }
-
+        this.construirCamino();
     }
 
     /**
@@ -84,13 +74,19 @@ public class Tablero {
         }
         this.laberinto[coordenadaICamino][coordenadaJCamino] = Square.CAMINO;
 
+        if (this.coordenadaICamino != this.size - 1) {
+            System.out.println("-------------------------------------------");
+            print();
+            construirCamino();
+        }
+
     }
 
     private boolean construir(int i, int j) {
 
         if (i < 0 || i >= this.size || j < 0 || j >= this.size){return false;}
 
-        else if (examinarCasillas(i, j)) {
+        else if (examinarCasillas(i, j)&&this.laberinto[i][j]!=Square.CAMINO) {
             return true;
         }
         else return false;
@@ -116,28 +112,6 @@ public class Tablero {
         else return false; 
     }
 
-    public void elegirDireccion(String opcion) {
-
-        switch (opcion) {
-            case "ARRIBA":
-
-                break;
-
-            case "ABAJO":
-
-                break;
-            case "IZQUIERDA":
-
-                break;
-
-            case "DERECHA":
-                break;
-
-            default:
-                break;
-        }
-
-    }
 
     public void print() {
         for (int i = 0; i < laberinto.length; i++) {
