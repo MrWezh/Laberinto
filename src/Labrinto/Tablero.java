@@ -11,6 +11,8 @@ public class Tablero {
     private String opcionAnterior = "ARRIBA";
     private ArrayList<int[]> posicionesCamino;
 
+    private int limiteGeneralCaminos = 0; 
+
     private boolean[] puedeGirar;
 
     private int size = 10;
@@ -33,9 +35,9 @@ public class Tablero {
             }
         }
 
-        Random randomInicial = new Random();
+       // Random randomInicial = new Random();
 
-        coordenadaJCamino = randomInicial.nextInt(this.size);
+      //  coordenadaJCamino = randomInicial.nextInt(this.size);
         this.laberinto[this.coordenadaICamino][this.coordenadaJCamino] = Square.CAMINO;
 
         this.construirCamino();
@@ -74,11 +76,14 @@ public class Tablero {
         }
         this.laberinto[coordenadaICamino][coordenadaJCamino] = Square.CAMINO;
 
-        if (this.coordenadaICamino != this.size - 1) {
-            System.out.println("-------------------------------------------");
-            print();
+        if (this.coordenadaICamino != this.size - 1&&limiteGeneralCaminos != this.size*100) {
+           // System.out.println("-------------------------------------------");
+            //print();
+            limiteGeneralCaminos ++; 
             construirCamino();
         }
+
+        limiteGeneralCaminos = 0; 
 
     }
 
