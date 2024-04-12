@@ -9,26 +9,17 @@ public class Tablero {
     private int coordenadaICamino = 0;
     private int coordenadaJCamino = 0;
     private ArrayList<int[]> posicionesCamino;
-
     private int limiteGeneralCaminos = 0; 
 
-    private boolean[] puedeGirar;
-
-    private int size = 20;
+    private int size = 10;
 
     public void GeneralTablero() {
 
         laberinto = new Square[this.size][this.size];
         this.posicionesCamino = new ArrayList<>();
-        this.puedeGirar = new boolean[this.size];
-        this.inical();
-
-    }
-
-    public void inical() {
-
+       
         for (int i = 0; i < this.size; i++) {
-            this.puedeGirar[i] = false;
+
             for (int j = 0; j < this.size; j++) {
                 this.laberinto[i][j] = Square.PARED;
             }
@@ -39,9 +30,17 @@ public class Tablero {
       //coordenadaJCamino = randomInicial.nextInt(this.size);
         this.laberinto[this.coordenadaICamino][this.coordenadaJCamino] = Square.CAMINO;
 
-        this.construirCamino();
+        this.construirCamino(true);
         this.removerIguales();
+
+        for (int i = 0; i < 3; i++) {
+            this.extenderCamino();    
+        }
+        
+
     }
+
+
 
     private void removerIguales() {
         int[] posicionesGuardados = {-1, -1};
@@ -55,6 +54,8 @@ public class Tablero {
             }
         }
     }
+
+
     
          
     
@@ -62,11 +63,11 @@ public class Tablero {
  /**
      * @return
      */
-    private void construirCamino() {
+    private void construirCamino(boolean guardarCoordenadasCaminos) {
         Random randomDireccion = new Random();
 
         // 1: subir, 2: girar izquierda, 3: bajar, 4: girar derecha
-        int opcion = randomDireccion.nextInt(this.size);
+        int opcion = randomDireccion.nextInt(4);
 
         switch (opcion) {
             case 1:
@@ -91,17 +92,18 @@ public class Tablero {
                 break;
         }
         this.laberinto[coordenadaICamino][coordenadaJCamino] = Square.CAMINO;
-        int[] e = {coordenadaICamino, coordenadaJCamino};
+        
+        if (guardarCoordenadasCaminos){int[] e = {coordenadaICamino, coordenadaJCamino};
         this.posicionesCamino.add(e);
-
-        if (this.coordenadaICamino != this.size - 1&&limiteGeneralCaminos != this.size*50) {
+}
+        if (this.coordenadaICamino != this.size - 1&&this.coordenadaJCamino >= 0&&this.limiteGeneralCaminos != this.size*2) {
            // System.out.println("-------------------------------------------");
             //print();
             limiteGeneralCaminos ++; 
-            construirCamino();
+            construirCamino(true);
         }
 
-        limiteGeneralCaminos = 0; 
+        else limiteGeneralCaminos = 0; 
 
     }
 
@@ -109,10 +111,11 @@ public class Tablero {
 
         if (i < 0 || i >= this.size || j < 0 || j >= this.size){return false;}
 
+       
         else if (examinarCasillas(i, j)&&this.laberinto[i][j]!=Square.CAMINO) {
             return true;
         }
-        else return false;
+        else {return false;}
 
     }
 
@@ -136,6 +139,41 @@ public class Tablero {
     }
 
 
+    public void extenderCamino(){
+
+
+        for (int i = posicionesCamino.size() - 1; i >= 0; i--)  {
+
+            int[] e = posicionesCamino.get(i);
+            this.examinacionHorizontalVertical(e[0], e[1]);
+            this.laberinto[coordenadaICamino][coordenadaJCamino] = Square.CAMINO;
+            this.construirCamino(true);
+        }
+        
+
+    }
+   // Verificar si las casillas de arriba, abajo, izquierda o derecha son posibles de extender como camino
+   
+public void examinacionHorizontalVertical(int i, int j) {
+
+    if (i - 1 >= 0 && this.laberinto[i - 1][j] == Square.PARED && examinarCasillas(i - 1, j)) {
+         i --;
+
+    } else if (j - 1 >= 0 && this.laberinto[i][j - 1] == Square.PARED && examinarCasillas(i, j - 1)) {
+        j --;
+
+    } else if (i + 1 < this.size && this.laberinto[i + 1][j] == Square.PARED && examinarCasillas(i + 1, j)) {
+        i ++;
+
+    } else if (j + 1 < this.size && this.laberinto[i][j + 1] == Square.PARED && examinarCasillas(i, j + 1)) {
+        j ++;
+
+    } 
+
+    this.coordenadaICamino = i; this.coordenadaJCamino = j; 
+}
+
+
     public void print() {
         for (int i = 0; i < laberinto.length; i++) {
             for (int j = 0; j < laberinto.length; j++) {
@@ -156,11 +194,13 @@ public class Tablero {
         }
 
 
-        for (int[] a : posicionesCamino) {
+      /*  for (int[] a : posicionesCamino) {
             for (int i = 0; i < a.length; i++) {
                 System.out.print(a[i]);
             }System.out.println();
-        }
+        }*/
     }
+
+
 
 }
