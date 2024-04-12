@@ -11,7 +11,8 @@ public class Tablero {
     private ArrayList<int[]> posicionesCamino;
     private int limiteGeneralCaminos = 0; 
 
-    private int size = 10;
+    //los usuarios tendran 3 niveles a elegir, 10 facil, 15 medio y 20 dificil.
+    private int size = 20;
 
     public void GeneralTablero() {
 
@@ -37,10 +38,7 @@ public class Tablero {
             this.extenderCamino();    
         }
         
-
     }
-
-
 
     private void removerIguales() {
         int[] posicionesGuardados = {-1, -1};
@@ -53,12 +51,7 @@ public class Tablero {
                 posicionesGuardados[1] = e[1];
             }
         }
-    }
-
-
-    
-         
-    
+    } 
 
  /**
      * @return
@@ -147,7 +140,7 @@ public class Tablero {
             int[] e = posicionesCamino.get(i);
             this.examinacionHorizontalVertical(e[0], e[1]);
             this.laberinto[coordenadaICamino][coordenadaJCamino] = Square.CAMINO;
-            this.construirCamino(true);
+            this.construirCamino(false);
         }
         
 
