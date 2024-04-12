@@ -8,14 +8,13 @@ public class Tablero {
     private Square[][] laberinto;
     private int coordenadaICamino = 0;
     private int coordenadaJCamino = 0;
-    private String opcionAnterior = "ARRIBA";
     private ArrayList<int[]> posicionesCamino;
 
     private int limiteGeneralCaminos = 0; 
 
     private boolean[] puedeGirar;
 
-    private int size = 10;
+    private int size = 20;
 
     public void GeneralTablero() {
 
@@ -41,9 +40,26 @@ public class Tablero {
         this.laberinto[this.coordenadaICamino][this.coordenadaJCamino] = Square.CAMINO;
 
         this.construirCamino();
+        this.removerIguales();
     }
 
-    /**
+    private void removerIguales() {
+        int[] posicionesGuardados = {-1, -1};
+        for (int i = posicionesCamino.size() - 1; i >= 0; i--) {
+            int[] e = posicionesCamino.get(i);
+            if (posicionesGuardados[0] == e[0] && posicionesGuardados[1] == e[1]) {
+                posicionesCamino.remove(i);
+            } else {
+                posicionesGuardados[0] = e[0];
+                posicionesGuardados[1] = e[1];
+            }
+        }
+    }
+    
+         
+    
+
+ /**
      * @return
      */
     private void construirCamino() {
@@ -78,7 +94,7 @@ public class Tablero {
         int[] e = {coordenadaICamino, coordenadaJCamino};
         this.posicionesCamino.add(e);
 
-        if (this.coordenadaICamino != this.size - 1&&limiteGeneralCaminos != this.size*100) {
+        if (this.coordenadaICamino != this.size - 1&&limiteGeneralCaminos != this.size*50) {
            // System.out.println("-------------------------------------------");
             //print();
             limiteGeneralCaminos ++; 
