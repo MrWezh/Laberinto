@@ -3,10 +3,10 @@ public class MainLaberinto {
 
     public static void main(String[] args) {
      
-        Tablero tablero = new Tablero(); 
+        Interacciones interacciones = new Interacciones();
 
-        tablero.GeneralTablero(); 
-        tablero.print();
+        interacciones.menuInical();
+        
 
     }
 }

@@ -50,14 +50,15 @@ public class Tablero {
 
         laberinto = new Square[this.size][this.size];
         this.posicionesCamino = new ArrayList<>();
-       
+     
         for (int i = 0; i < this.size; i++) {
 
             for (int j = 0; j < this.size; j++) {
+                
                 this.laberinto[i][j] = Square.PARED;
             }
         }
-        this.laberinto[this.coordenadaICamino][this.coordenadaJCamino] = Square.CAMINO;
+        this.laberinto[this.coordenadaICamino][this.coordenadaJCamino] = Square.PERSONAJE;
 
         this.construirCamino();
         for (int i = 0; i < 3; i++) {
@@ -97,7 +98,7 @@ public class Tablero {
                 break;
         }
         //solo guardar cuando no es camino para no pintar otra vez una casilla que ya es camino y para evitar coordenadas repetidas de camonos.
-        if (this.laberinto[coordenadaICamino][coordenadaJCamino] != Square.CAMINO){
+        if (this.laberinto[coordenadaICamino][coordenadaJCamino] == Square.PARED){
         this.laberinto[coordenadaICamino][coordenadaJCamino] = Square.CAMINO;
        int[] e = {coordenadaICamino, coordenadaJCamino};
         this.posicionesCamino.add(e);
@@ -124,7 +125,7 @@ public class Tablero {
         if (i < 0 || i >= this.size || j < 0 || j >= this.size){return false;}
 
        
-        else if (examinarCasillas(i, j)&&this.laberinto[i][j]!=Square.CAMINO) {
+        else if (examinarCasillas(i, j)&&this.laberinto[i][j]==Square.PARED) {
             return true;
         }
         else {return false;}
@@ -143,23 +144,37 @@ que replesentan casillas que pueden ser caminos, solo tienen menos de 3 caminos.
 
 */
 
-    private boolean examinarCasillas(int i, int j){
+private boolean examinarCasillas(int i, int j) {
+    int contador = 0;
 
-        int contador = 0; 
+    int[][] opciones = {
+            {-1, 0},
+            {0, -1},
+            {-1, -1},
+            {1, 0},
+            {0, 1},
+            {1, 1},
+            {-1, 1},
+            {1, -1}
+    };
 
-        if (j - 1 >= 0&&this.laberinto[i][j-1] == Square.CAMINO){contador++;}
-        if (j + 1 < this.size&&this.laberinto[i][j+1] == Square.CAMINO){contador++;}
-        if (i - 1 >= 0&&this.laberinto[i-1][j] == Square.CAMINO){contador++;}
-        if (i + 1 < this.size&&this.laberinto[i+1][j] == Square.CAMINO){contador++;}
+    for (int k = 0; k < opciones.length; k++) {
+        int filaVecina = i + opciones[k][0];
+        int columnaVecina = j + opciones[k][1];
 
-        if (j - 1 >= 0 && i - 1 >= 0&&this.laberinto[i-1][j-1] == Square.CAMINO){contador++;}
-        if (j + 1  < this.size && i - 1 >= 0&&this.laberinto[i-1][j+1] == Square.CAMINO){contador++;}
-        if (j - 1 >= 0 && i + 1 < this.size&&this.laberinto[i+1][j-1] == Square.CAMINO){contador++;}
-        if (j + 1 < this.size && i + 1 < this.size&&this.laberinto[i+1][j+1] == Square.CAMINO){contador++;}
-
-        if (contador <= 2){return true; }
-        else return false; 
+        // Verificar si las coordenadas vecinas están dentro de los límites del laberinto
+        if (filaVecina >= 0 && filaVecina < this.size && columnaVecina >= 0 && columnaVecina < this.size) {
+            // Verificar si la casilla vecina es CAMINO o PERSONAJE
+            if (this.laberinto[filaVecina][columnaVecina] == Square.CAMINO ||
+                    this.laberinto[filaVecina][columnaVecina] == Square.PERSONAJE) {
+                contador++;
+            }
+        }
     }
+
+    // Devolver true si el contador es menor o igual a 2, de lo contrario false
+    return contador <= 2;
+}
 
     /*Recorrer toda la rista de camino que se han guardados en el Arraylist posicionesCaminos para "mirar" si se puede extender mas caminos utilizandos la función 
      * examinacionHorizontalVertical.
@@ -204,36 +219,8 @@ public void examinacionHorizontalVertical(int i, int j) {
             this.posicionesCamino.add(guardarCoordenadaCamino);
         }
 }
-
- 
-    public void print() {  
-
-        for (int i = 0; i < laberinto.length; i++) {
-            for (int j = 0; j < laberinto.length; j++) {
-
-                Square symbol = this.laberinto[i][j];
-
-                switch (symbol) {
-                    case PARED:
-                        System.out.print(" ■ ");
-                        break;
-
-                    case CAMINO:
-                        System.out.print(" · ");
-                        break;
-                }
-            }
-            System.out.println();
-        }
-
-    /*for (int[] a : posicionesCamino) {
-            for (int i = 0; i < a.length; i++) {
-                 System.out.print(a[i]);
-            }
-            System.out.println();
-        }
-        System.out.println();*/
+    
         
     }
 
-}
+

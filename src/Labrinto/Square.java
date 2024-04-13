@@ -4,12 +4,11 @@ public enum Square {
     BOARD,
     CAMINO,
     PARED, 
-    PUERTA,
-    TESORO,
+    SALIDA,
+    
+    PERSONAJE
 
-    CaraTriste,
-    CaraSonrisa,
-    trampas,
-    bomba
+
+   
 
 }
