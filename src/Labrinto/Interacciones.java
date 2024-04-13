@@ -37,7 +37,7 @@ public class Interacciones {
         switch (opcion) {
             case 1:
             this.elegirDificurtad();
-            //this.crearPersonaje();
+            this.crearPersonaje();
             this.inicialJuego();
             
            
@@ -77,6 +77,7 @@ public class Interacciones {
                 this.talero.getAsesino().setAtaque(3);
                 this.talero.getAsesino().setEscudo(3);
                 this.talero.getAsesino().setVida(3);
+                this.puntosDeasignacion -= 5;
 
 
 
@@ -114,13 +115,82 @@ public class Interacciones {
     }
 
     private void crearPersonaje() {
-        int puntos = this.puntosDeasignacion - this.talero.getJugador().getSumaPuntos();
+        this.clearScreen();
+       this.indroducirNombrePJ();
+       this.indroducirVidaPJ();
+       this.indroducirAtaquePJ();
+       if(puntosDeasignacion != 0){
+        indroducirEscudoPJ();
+       }
+
+       this.clearScreen();
+
+       System.out.println(this.talero.getJugador().toString());
+       System.out.println("¿Estas deacuerdo de la confuguración de tu PJ?(y/n)");
+       String yesno = wz.next().toLowerCase();
+
+       if(yesno.equals("n")){
+        this.clearScreen();
+        crearPersonaje();
+       }
+
+    }
+
+    public void indroducirNombrePJ(){
+        wz.nextLine();
+        System.out.println("Indroduzca el nombre que tendrá tu PJ:");
+        String nombre = wz.nextLine();
+        
+        System.out.println("-------------------------------------");
+        System.out.println("¿Estas seguro que tu PJ se llamará "+nombre+"?(y/n)");
+        String yesno = wz.next().toLowerCase();
+        if(yesno.equals("n")){indroducirNombrePJ();}
+
+        else{this.talero.getJugador().setNombre(nombre);}
+    }
+    
+
+    public void indroducirVidaPJ(){
+        int puntos = this.puntosDeasignacion;
         System.out.println("PUNTOS DE ASIGNACIÓN: "+puntos);
-        while (true) {
-            System.out.println("Indroduzca la vida que tendrá tu PJ:");
+        System.out.println("-------------------------------------");
+        System.out.println("Indroduzca la vida que tendrá tu PJ:");
             int vidaPJ = wz.nextInt();
-            if (vidaPJ <= this.puntosDeasignacion-2) {}            
-        }
+            if (vidaPJ > this.puntosDeasignacion-4||vidaPJ<0) {
+            System.out.println("----------OPCIÓN INCORRECTO------------");
+                indroducirVidaPJ();
+            }else{
+                this.puntosDeasignacion -= vidaPJ;
+                this.talero.getJugador().setVida(vidaPJ);
+      }
+    }
+    public void indroducirAtaquePJ(){
+        int puntos = this.puntosDeasignacion;
+        System.out.println("PUNTOS DE ASIGNACIÓN: "+puntos);
+        System.out.println("-------------------------------------");
+        System.out.println("Indroduzca la ataque que tendrá tu PJ:");
+            int ataquePJ = wz.nextInt();
+            if (ataquePJ > this.puntosDeasignacion||ataquePJ<0) {
+            System.out.println("----------OPCIÓN INCORRECTO------------");
+                indroducirAtaquePJ();
+            }else{
+                this.puntosDeasignacion -= ataquePJ;
+                this.talero.getJugador().setAtaque(ataquePJ);
+      }
+    }
+    public void indroducirEscudoPJ(){
+        int puntos = this.puntosDeasignacion;
+        System.out.println("PUNTOS DE ASIGNACIÓN: "+puntos);
+        System.out.println("-------------------------------------");
+        System.out.println("Indroduzca la escudo que tendrá tu PJ:");
+            int escudoPJ = wz.nextInt();
+            if (escudoPJ > this.puntosDeasignacion||escudoPJ<0) {
+            System.out.println("----------OPCIÓN INCORRECTO------------");
+                indroducirEscudoPJ();
+            }else{
+                this.puntosDeasignacion -= escudoPJ;
+                this.talero.getJugador().setEscudo(escudoPJ);
+      }
     }
 
     private void inicialJuego() {

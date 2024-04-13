@@ -6,10 +6,6 @@ public class Jugador {
     private int ataque;
     private int escudo;
 
-    private int sumaPuntos = this.vida*this.ataque*this.escudo;
-
-    
-
     public int getEscudo() {
         return escudo;
     }
@@ -35,16 +31,11 @@ public class Jugador {
         this.ataque = ataque;
     }
 
-    public int getSumaPuntos() {
-        return sumaPuntos;
-    }
-    public void setSumaPuntos(int sumaPuntos) {
-        this.sumaPuntos = sumaPuntos;
-    }
+    
     @Override
     public String toString() {
         return "Jugador [Nombre=" + Nombre + ", vida=" + vida + ", ataque=" + ataque + ", escudo=" + escudo
-                + ", sumaPuntos=" + sumaPuntos + "]";
+                + "]";
     }
 
     

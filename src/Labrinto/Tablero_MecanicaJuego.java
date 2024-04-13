@@ -71,6 +71,16 @@ public class Tablero_MecanicaJuego extends Tablero{
         this.generarSalida();
     }
 
+    private void generarSalida() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'generarSalida'");
+    }
+
+    private void generarEnemigos() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'generarEnemigos'");
+    }
+
     private void generarRecompensa() {
         
     }
@@ -96,7 +106,20 @@ public class Tablero_MecanicaJuego extends Tablero{
                          System.out.print(" · ");
                          break;
                      case PERSONAJE:
-                     System.out.print(" 人");
+                        System.out.print(" \u4EBA ");
+                        break;
+                     case SALIDA:
+                        System.out.print(" 门 ");
+                        break;
+                     case RECOMPENSA:
+                         System.out.print(" ? ");
+                        break;
+                     case SOLDADO:
+                         System.out.print(" 兵 ");
+                        break;
+                     case ASESINO:
+                         System.out.print(" 杀 ");
+                        break;
                  }
              }
              System.out.println();
