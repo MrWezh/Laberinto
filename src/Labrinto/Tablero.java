@@ -10,8 +10,40 @@ public class Tablero {
     private int coordenadaJCamino = 0;
     private ArrayList<int[]> posicionesCamino;
     private int limiteGeneralCaminos = 0; 
+    
 
-    //los usuarios tendran 3 niveles a elegir, 10 facil, 15 medio y 20 dificil.
+    public Square[][] getLaberinto() {
+        return laberinto;
+    }
+    public void setLaberinto(Square[][] laberinto) {
+        this.laberinto = laberinto;
+    }
+    public int getCoordenadaICamino() {
+        return coordenadaICamino;
+    }
+    public void setCoordenadaICamino(int coordenadaICamino) {
+        this.coordenadaICamino = coordenadaICamino;
+    }
+    public int getCoordenadaJCamino() {
+        return coordenadaJCamino;
+    }
+    public void setCoordenadaJCamino(int coordenadaJCamino) {
+        this.coordenadaJCamino = coordenadaJCamino;
+    }
+    public ArrayList<int[]> getPosicionesCamino() {
+        return posicionesCamino;
+    }
+    public void setPosicionesCamino(ArrayList<int[]> posicionesCamino) {
+        this.posicionesCamino = posicionesCamino;
+    }
+    public int getSize() {
+        return size;
+    }
+    public void setSize(int size) {
+        this.size = size;
+    }
+
+    //los usuarios tendran 3 niveles a elegir, 10x10 facil, 15x15 medio y 20x20 dificil.
     private int size = 20;
 
     public void GeneralTablero() {
@@ -25,38 +57,18 @@ public class Tablero {
                 this.laberinto[i][j] = Square.PARED;
             }
         }
-
-      // Random randomInicial = new Random();
-
-      //coordenadaJCamino = randomInicial.nextInt(this.size);
         this.laberinto[this.coordenadaICamino][this.coordenadaJCamino] = Square.CAMINO;
 
-        this.construirCamino(true);
-        this.removerIguales();
-
+        this.construirCamino();
         for (int i = 0; i < 3; i++) {
             this.extenderCamino();    
-        }
+            } 
         
     }
-
-    private void removerIguales() {
-        int[] posicionesGuardados = {-1, -1};
-        for (int i = posicionesCamino.size() - 1; i >= 0; i--) {
-            int[] e = posicionesCamino.get(i);
-            if (posicionesGuardados[0] == e[0] && posicionesGuardados[1] == e[1]) {
-                posicionesCamino.remove(i);
-            } else {
-                posicionesGuardados[0] = e[0];
-                posicionesGuardados[1] = e[1];
-            }
-        }
-    } 
-
  /**
      * @return
      */
-    private void construirCamino(boolean guardarCoordenadasCaminos) {
+    private void construirCamino() {
         Random randomDireccion = new Random();
 
         // 1: subir, 2: girar izquierda, 3: bajar, 4: girar derecha
@@ -84,22 +96,29 @@ public class Tablero {
             default:
                 break;
         }
+        //solo guardar cuando no es camino para no pintar otra vez una casilla que ya es camino y para evitar coordenadas repetidas de camonos.
+        if (this.laberinto[coordenadaICamino][coordenadaJCamino] != Square.CAMINO){
         this.laberinto[coordenadaICamino][coordenadaJCamino] = Square.CAMINO;
-        
-        if (guardarCoordenadasCaminos){int[] e = {coordenadaICamino, coordenadaJCamino};
+       int[] e = {coordenadaICamino, coordenadaJCamino};
         this.posicionesCamino.add(e);
-}
+        }
+
+        //this.size * 2 para limitar la generación de camino, ya que hay situaciones que el generador de camino se que estancado y entra en un bucle infinito.
+        //posible situación: se queda en el medio de la matriz/mapa/laberinto y no `puede "moverse más para generar caminos", ya que estaria rodeado de paredes que 
+        //no pueden ser camino (el codigo reeplaza las paredes que pueden ser caminos los cuales no compactan con otros).
         if (this.coordenadaICamino != this.size - 1&&this.coordenadaJCamino >= 0&&this.limiteGeneralCaminos != this.size*2) {
            // System.out.println("-------------------------------------------");
             //print();
             limiteGeneralCaminos ++; 
-            construirCamino(true);
+            construirCamino();
         }
 
         else limiteGeneralCaminos = 0; 
 
     }
 
+    /*la función/metodo construir sirve para ver si las casillas escogidas por el metodo construirCamino ,generados aleatoriamente, 
+    es una casillas varida(con casilla me refiero a coordenadas de la matriz).*/
     private boolean construir(int i, int j) {
 
         if (i < 0 || i >= this.size || j < 0 || j >= this.size){return false;}
@@ -112,6 +131,17 @@ public class Tablero {
 
     }
 
+/*para evitar que los caminos se compactan, antes de poner pintar el camino, miramos si a su alrededor hay más de 3 caminos o no:
+
+                                                    ··s
+                                                   s·x si ponemos un camino en está posición, se compactará con los otros. 
+                                                    ··
+                                                     ·
+
+Si nos fijamos alrededor de la x del ejemplo, podemos ver que hay 3 camino. No obstante, los alrededores de las s, 
+que replesentan casillas que pueden ser caminos, solo tienen menos de 3 caminos.  
+
+*/
 
     private boolean examinarCasillas(int i, int j){
 
@@ -131,7 +161,9 @@ public class Tablero {
         else return false; 
     }
 
-
+    /*Recorrer toda la rista de camino que se han guardados en el Arraylist posicionesCaminos para "mirar" si se puede extender mas caminos utilizandos la función 
+     * examinacionHorizontalVertical.
+     */
     public void extenderCamino(){
 
 
@@ -140,7 +172,7 @@ public class Tablero {
             int[] e = posicionesCamino.get(i);
             this.examinacionHorizontalVertical(e[0], e[1]);
             this.laberinto[coordenadaICamino][coordenadaJCamino] = Square.CAMINO;
-            this.construirCamino(false);
+            this.construirCamino();
         }
         
 
@@ -148,6 +180,8 @@ public class Tablero {
    // Verificar si las casillas de arriba, abajo, izquierda o derecha son posibles de extender como camino
    
 public void examinacionHorizontalVertical(int i, int j) {
+
+    boolean sepuedeExtender = true;
 
     if (i - 1 >= 0 && this.laberinto[i - 1][j] == Square.PARED && examinarCasillas(i - 1, j)) {
          i --;
@@ -161,13 +195,19 @@ public void examinacionHorizontalVertical(int i, int j) {
     } else if (j + 1 < this.size && this.laberinto[i][j + 1] == Square.PARED && examinarCasillas(i, j + 1)) {
         j ++;
 
-    } 
+    } else sepuedeExtender = false;
 
+    //esta restricción sirve para evitar guardar coordenadas inecesarias o repetidas.
+    if(sepuedeExtender){
     this.coordenadaICamino = i; this.coordenadaJCamino = j; 
+    int[] guardarCoordenadaCamino = {this.coordenadaICamino, this.coordenadaJCamino};
+            this.posicionesCamino.add(guardarCoordenadaCamino);
+        }
 }
 
+ 
+    public void print() {  
 
-    public void print() {
         for (int i = 0; i < laberinto.length; i++) {
             for (int j = 0; j < laberinto.length; j++) {
 
@@ -179,21 +219,21 @@ public void examinacionHorizontalVertical(int i, int j) {
                         break;
 
                     case CAMINO:
-                        System.out.print(" . ");
+                        System.out.print(" · ");
                         break;
                 }
             }
             System.out.println();
         }
 
-
-      /*  for (int[] a : posicionesCamino) {
+    /*for (int[] a : posicionesCamino) {
             for (int i = 0; i < a.length; i++) {
-                System.out.print(a[i]);
-            }System.out.println();
-        }*/
+                 System.out.print(a[i]);
+            }
+            System.out.println();
+        }
+        System.out.println();*/
+        
     }
-
-
 
 }
