@@ -8,6 +8,7 @@ public class Tablero_MecanicaJuego extends Tablero{
     private int numeroRecompensa;
     private int numeroEnemigos;
     private int numeroSalida;
+    private boolean[][] visionPJ;
 
     
     
@@ -66,9 +67,12 @@ public class Tablero_MecanicaJuego extends Tablero{
     }
 
     public void generalOtros(){
+        this.visionPJ = new boolean[getSize()][getSize()];
+
         this.generarRecompensa();
         this.generarEnemigos();
         this.generarSalida();
+        
     }
 
     private void generarSalida() {
@@ -106,7 +110,7 @@ public class Tablero_MecanicaJuego extends Tablero{
                          System.out.print(" · ");
                          break;
                      case PERSONAJE:
-                        System.out.print(" \u4EBA ");
+                        System.out.print(" 人 ");
                         break;
                      case SALIDA:
                         System.out.print(" 门 ");
