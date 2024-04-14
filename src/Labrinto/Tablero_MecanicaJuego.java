@@ -1,17 +1,37 @@
 package Labrinto;
 
+import java.util.Random;
+
 public class Tablero_MecanicaJuego extends Tablero{
 
     private Jugador jugador;
     Enemigos soldado;//soldado vida:8 ataque:3 escudo: 4
     Enemigos asesino; //assesino vida: 6 ataque: 8
-    private int numeroRecompensa;
-    private int numeroEnemigos;
-    private int numeroSalida;
+    private int numeroRecompensa=6;
+    private int numeroEnemigos=6;
+    private int numeroSalida=1;
     private boolean[][] visionPJ;
+
+    private int[] coordenadaPJ={0,0};
 
     
     
+    public boolean[][] getVisionPJ() {
+        return visionPJ;
+    }
+
+    public void setVisionPJ(boolean[][] visionPJ) {
+        this.visionPJ = visionPJ;
+    }
+
+    public int[] getCoordenadaPJ() {
+        return coordenadaPJ;
+    }
+
+    public void setCoordenadaPJ(int[] coordenadaPJ) {
+        this.coordenadaPJ = coordenadaPJ;
+    }
+
     public Tablero_MecanicaJuego() {
         jugador = new Jugador();
         soldado = new Enemigos();
@@ -69,25 +89,91 @@ public class Tablero_MecanicaJuego extends Tablero{
     public void generalOtros(){
         this.visionPJ = new boolean[getSize()][getSize()];
 
-        this.generarRecompensa();
-        this.generarEnemigos();
-        this.generarSalida();
+        if (numeroSalida == 1)this.generar(getSize()/2 + 3,1, Square.SALIDA, numeroSalida);
+        if (numeroSalida == 2){
+            this.generar(getSize()/2 + 3,3, Square.SALIDA, numeroSalida/2);
+            this.generar(getSize()/2 + 3,1, Square.SALIDA, numeroSalida/2);
+        }
+        if (numeroSalida == 3){
+            this.generar(getSize()/2 + 3,1, Square.SALIDA, 1);
+            this.generar(getSize()/2 + 3,2, Square.SALIDA, 1);
+            this.generar(getSize()/2 + 3,3, Square.SALIDA, 1);
+        }
+        this.generar(3,1, Square.RECOMPENSA, numeroRecompensa);
+        
+        Square[] enemigo = {Square.ASESINO, Square.SOLDADO};
+        
+        
+        this.generar(3,1, enemigo[0], numeroEnemigos/2);
+        this.generar(3,1, enemigo[1], numeroEnemigos/2);
+
         
     }
 
-    private void generarSalida() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'generarSalida'");
+    private void generar(int rango,int seleccionarZona, Square symbol, int numeroVeces) {
+        Random random = new Random();
+        
+        for (int i = 0; i < numeroVeces; i++) {
+            int cualCamino = random.nextInt(getPosicionesCamino().size());
+
+            int[] caminoRandom = getPosicionesCamino().get(cualCamino);
+
+            int filas = caminoRandom[0];
+            int columnas = caminoRandom[1];
+            boolean randomCamino = false;
+
+            // si dividimos el tablero en 4 zonas, cuando selecionarzona es 1 está seleccionando la zona de abajo derecha; si es 2 abajo izquierda; 3 arriba derecha
+            /*
+             * arriba izquierda| arriba derecha
+             * -------------------------------
+             * abajo izqueirda| abajo derecha
+             */
+            if (seleccionarZona == 1) randomCamino = filas >= rango&&columnas >= rango;
+            if (seleccionarZona == 2) randomCamino = filas >= rango&&columnas < rango;
+            if (seleccionarZona == 3) randomCamino = filas < rango&&columnas >= rango;
+
+            if(getLaberinto()[filas][columnas] == Square.CAMINO&&randomCamino)getLaberinto()[filas][columnas] = symbol;
+            else i--; 
+        }
+
     }
 
-    private void generarEnemigos() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'generarEnemigos'");
+    public int[] movimientoPJ(String movimiento){
+
+        int[] mover = {0,0};
+        
+        switch (movimiento) {
+            case "w":
+            mover[0] = -1;
+                break;
+
+            case "a":
+            mover[1] = -1;
+
+                break;
+
+            case "s":
+            mover[0] = 1;
+            
+                break;
+            case "d":
+            mover[1] = 1;
+
+                 break;
+            default:
+                break;
+        }
+        int filas = coordenadaPJ[0] + mover[0];
+        int columnas = coordenadaPJ[1] + mover[1];
+        
+        int[] coordenadasMover = {filas, columnas};
+        return coordenadasMover;
     }
 
-    private void generarRecompensa() {
+    public void descubrirCasillas(){
         
     }
+
     public void print() {  
 
         /* for (int i = 0; i < laberinto.length; i++) {
@@ -110,19 +196,19 @@ public class Tablero_MecanicaJuego extends Tablero{
                          System.out.print(" · ");
                          break;
                      case PERSONAJE:
-                        System.out.print(" 人 ");
+                        System.out.print(" 人");
                         break;
                      case SALIDA:
-                        System.out.print(" 门 ");
+                        System.out.print(" 门");
                         break;
                      case RECOMPENSA:
                          System.out.print(" ? ");
                         break;
                      case SOLDADO:
-                         System.out.print(" 兵 ");
+                         System.out.print(" 兵");
                         break;
                      case ASESINO:
-                         System.out.print(" 杀 ");
+                         System.out.print(" 杀");
                         break;
                  }
              }

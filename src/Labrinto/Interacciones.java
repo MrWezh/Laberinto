@@ -1,16 +1,19 @@
 package Labrinto;
 import java.util.Scanner;
 
+
 public class Interacciones {
 
-    Tablero_MecanicaJuego talero;
+    Tablero_MecanicaJuego tablero;
     Scanner wz;
     private int puntosDeasignacion = 15;
+    private boolean ganarPartida = false;
+    private boolean perderPartida = false;
     
     
     public Interacciones() {
         wz = new Scanner(System.in);
-        talero = new Tablero_MecanicaJuego();
+        tablero = new Tablero_MecanicaJuego();
     }
 
     public int getPuntosDeasignacion() {
@@ -21,8 +24,8 @@ public class Interacciones {
         this.puntosDeasignacion = puntosDeasignacion;
     }
 
-    public Tablero_MecanicaJuego getTalero() {
-        return talero;
+    public Tablero_MecanicaJuego getTablero() {
+        return tablero;
     }
     
     public void menuInical(){
@@ -37,7 +40,7 @@ public class Interacciones {
         switch (opcion) {
             case 1:
             this.elegirDificurtad();
-            this.crearPersonaje();
+            //this.crearPersonaje();
             this.inicialJuego();
             
            
@@ -69,40 +72,53 @@ public class Interacciones {
 
         switch (opcion) {
             case 1:
-                this.talero.setSize(10);
-                this.talero.getSoldado().setAtaque(1);
-                this.talero.getSoldado().setEscudo(2);
-                this.talero.getSoldado().setVida(4);
+                this.tablero.setSize(10);
+                this.tablero.getSoldado().setAtaque(1);
+                this.tablero.getSoldado().setEscudo(5);
+                this.tablero.getSoldado().setVida(5);
 
-                this.talero.getAsesino().setAtaque(3);
-                this.talero.getAsesino().setEscudo(3);
-                this.talero.getAsesino().setVida(3);
+                this.tablero.getAsesino().setAtaque(3);
+                this.tablero.getAsesino().setEscudo(3);
+                this.tablero.getAsesino().setVida(3);
+            
                 this.puntosDeasignacion -= 5;
 
-
+                this.tablero.setNumeroEnemigos(6);
+                this.tablero.setNumeroRecompensa(6);
+                this.tablero.setNumeroSalida(1);
 
                 break;
             case 2:
-                this.talero.setSize(15);
-                this.talero.getSoldado().setAtaque(3);
-                this.talero.getSoldado().setEscudo(4);
-                this.talero.getSoldado().setVida(8);
+                this.tablero.setSize(15);
+                this.tablero.getSoldado().setAtaque(6);
+                this.tablero.getSoldado().setEscudo(6);
+                this.tablero.getSoldado().setVida(8);
 
-                this.talero.getAsesino().setAtaque(8);
-                this.talero.getAsesino().setEscudo(1);
-                this.talero.getAsesino().setVida(5);
+                this.tablero.getAsesino().setAtaque(8);
+                this.tablero.getAsesino().setEscudo(0);
+                this.tablero.getAsesino().setVida(5);
+
+                this.tablero.setNumeroEnemigos(14);
+                this.tablero.setNumeroRecompensa(14);
+                this.tablero.setNumeroSalida(2);
+
                 break;
             case 3:
-                this.talero.setSize(20);
-                this.talero.getSoldado().setAtaque(3);
-                this.talero.getSoldado().setEscudo(6);
-                this.talero.getSoldado().setVida(10);
+                this.tablero.setSize(20);
+                this.tablero.getSoldado().setAtaque(3);
+                this.tablero.getSoldado().setEscudo(6);
+                this.tablero.getSoldado().setVida(24);
 
-                this.talero.getAsesino().setAtaque(9);
-                this.talero.getAsesino().setEscudo(6);
-                this.talero.getAsesino().setVida(2);
+                this.tablero.getAsesino().setAtaque(9);
+                this.tablero.getAsesino().setEscudo(7);
+                this.tablero.getAsesino().setVida(5);
 
                 this.puntosDeasignacion += 5; 
+
+                this.tablero.setNumeroEnemigos(20);
+                this.tablero.setNumeroRecompensa(20);
+                this.tablero.setNumeroSalida(3);
+
                 break;
             default:
             this.clearScreen();
@@ -117,23 +133,36 @@ public class Interacciones {
     private void crearPersonaje() {
         this.clearScreen();
        this.indroducirNombrePJ();
-       this.indroducirVidaPJ();
-       this.indroducirAtaquePJ();
+       int vida = this.indroducirVidaAtaqueEscudoPJ("vida");
+       int ataque = this.indroducirVidaAtaqueEscudoPJ("ataque");
+       int escudo = 0;
        if(puntosDeasignacion != 0){
-        indroducirEscudoPJ();
+       escudo = this.indroducirVidaAtaqueEscudoPJ("escudo");
        }
 
-       this.clearScreen();
+      
+       while (true){
 
-       System.out.println(this.talero.getJugador().toString());
-       System.out.println("¿Estas deacuerdo de la confuguración de tu PJ?(y/n)");
+        System.out.println("Nombre de tu personaje: "+this.tablero.getJugador().getNombre());
+        System.out.println("[vida: "+vida+" | ataque: "+ataque+" | escudo: "+escudo+"]");
+
+       System.out.println("¿Estas deacuerdo con la confuguración de tu PJ?(y/n)");
        String yesno = wz.next().toLowerCase();
 
        if(yesno.equals("n")){
+        this.puntosDeasignacion = vida + ataque + escudo;
         this.clearScreen();
         crearPersonaje();
        }
-
+       else if (yesno.equals("y")){
+        this.tablero.getJugador().setVida(vida);
+        this.tablero.getJugador().setAtaque(ataque);
+        this.tablero.getJugador().setEscudo(escudo);
+        break;}
+       else{
+        System.out.println("----------OPCIÓN INCORRECTO------------");
+       }
+    }this.clearScreen();
     }
 
     public void indroducirNombrePJ(){
@@ -146,63 +175,144 @@ public class Interacciones {
         String yesno = wz.next().toLowerCase();
         if(yesno.equals("n")){indroducirNombrePJ();}
 
-        else{this.talero.getJugador().setNombre(nombre);}
+        else if(yesno.equals("y")){this.tablero.getJugador().setNombre(nombre);}
+
+        else {
+            System.out.println("----------OPCIÓN INCORRECTO------------");
+            indroducirNombrePJ();
+        }
     }
     
 
-    public void indroducirVidaPJ(){
+    public int indroducirVidaAtaqueEscudoPJ(String nombre){
         int puntos = this.puntosDeasignacion;
         System.out.println("PUNTOS DE ASIGNACIÓN: "+puntos);
         System.out.println("-------------------------------------");
-        System.out.println("Indroduzca la vida que tendrá tu PJ:");
-            int vidaPJ = wz.nextInt();
-            if (vidaPJ > this.puntosDeasignacion-4||vidaPJ<0) {
-            System.out.println("----------OPCIÓN INCORRECTO------------");
-                indroducirVidaPJ();
-            }else{
-                this.puntosDeasignacion -= vidaPJ;
-                this.talero.getJugador().setVida(vidaPJ);
-      }
+        
+            int asignarPuntos = 0;
+            
+
+            switch (nombre) {
+                case "vida":
+                System.out.println("Indroduzca la "+nombre+" que tendrá tu PJ:");
+                asignarPuntos = wz.nextInt();
+                if (asignarPuntos > this.puntosDeasignacion-4||asignarPuntos<0) {
+                    System.out.println("----------OPCIÓN INCORRECTO------------");
+                    System.out.println(nombre+" máxima: "+ (this.puntosDeasignacion-4));
+                    indroducirVidaAtaqueEscudoPJ("vida");
+                    }else{
+                        this.puntosDeasignacion -= asignarPuntos;
+                        
+              }
+                    break;
+                case "ataque":
+                System.out.println("Indroduzca el "+nombre+" que tendrá tu PJ:");
+                asignarPuntos = wz.nextInt();
+                if (asignarPuntos > this.puntosDeasignacion||asignarPuntos<0) {
+                    System.out.println("----------OPCIÓN INCORRECTO------------");
+                    System.out.println(nombre+" máxima: "+ (this.puntosDeasignacion));
+                    indroducirVidaAtaqueEscudoPJ("ataque");
+                    }else{
+                        this.puntosDeasignacion -= asignarPuntos;
+                       
+              }
+                    break; 
+                case "escudo":
+                System.out.println("Indroduzca el "+nombre+" que tendrá tu PJ:");
+                asignarPuntos = wz.nextInt();
+                if (asignarPuntos > this.puntosDeasignacion||asignarPuntos<0) {
+                    System.out.println("----------OPCIÓN INCORRECTO------------");
+                    System.out.println("---------MOVIMIENTO INCORRECTO---------");
+                    System.out.println(nombre+" máxima: "+ (this.puntosDeasignacion));
+                    indroducirVidaAtaqueEscudoPJ("escudo");
+                    }else{
+                        this.puntosDeasignacion -= asignarPuntos;
+                        
+              } 
+                    break;
+                default:
+                    break;
+            }
+            return asignarPuntos;
+            
     }
-    public void indroducirAtaquePJ(){
-        int puntos = this.puntosDeasignacion;
-        System.out.println("PUNTOS DE ASIGNACIÓN: "+puntos);
-        System.out.println("-------------------------------------");
-        System.out.println("Indroduzca la ataque que tendrá tu PJ:");
-            int ataquePJ = wz.nextInt();
-            if (ataquePJ > this.puntosDeasignacion||ataquePJ<0) {
-            System.out.println("----------OPCIÓN INCORRECTO------------");
-                indroducirAtaquePJ();
-            }else{
-                this.puntosDeasignacion -= ataquePJ;
-                this.talero.getJugador().setAtaque(ataquePJ);
-      }
+
+    public void preguntarDireccionMovimiento(){
+        wz.nextLine();
+        System.out.print("Movimiento(w/a/s/d) :");
+        String movimiento = wz.next().toLowerCase();
+
+        int[] coordenadaMover = this.tablero.movimientoPJ(movimiento);
+
+
+        int[] casillaActual = this.tablero.getCoordenadaPJ();
+
+        if (coordenadaMover[0]*coordenadaMover[1] < 0||this.tablero.getLaberinto()[coordenadaMover[0]][coordenadaMover[1]] == Square.PARED) {
+            
+                    System.out.println("---------MOVIMIENTO INCORRECTO---------");
+                    this.preguntarDireccionMovimiento();
+        }
+
+        else {
+            this.tablero.getLaberinto()[casillaActual[0]][casillaActual[1]] = Square.CAMINO;
+            this.tablero.setCoordenadaPJ(coordenadaMover);
+            if (this.tablero.getLaberinto()[coordenadaMover[0]][coordenadaMover[1]] == Square.SALIDA) {
+                this.ganarPartida = true;
+            }
+
+            this.tablero.getLaberinto()[coordenadaMover[0]][coordenadaMover[1]] = Square.PERSONAJE;
+            
+
+        }
+
     }
-    public void indroducirEscudoPJ(){
-        int puntos = this.puntosDeasignacion;
-        System.out.println("PUNTOS DE ASIGNACIÓN: "+puntos);
-        System.out.println("-------------------------------------");
-        System.out.println("Indroduzca la escudo que tendrá tu PJ:");
-            int escudoPJ = wz.nextInt();
-            if (escudoPJ > this.puntosDeasignacion||escudoPJ<0) {
-            System.out.println("----------OPCIÓN INCORRECTO------------");
-                indroducirEscudoPJ();
-            }else{
-                this.puntosDeasignacion -= escudoPJ;
-                this.talero.getJugador().setEscudo(escudoPJ);
-      }
-    }
+ 
 
     private void inicialJuego() {
         this.clearScreen();
-        this.talero.GeneralTablero();
-        this.talero.print();
+        this.tablero.GeneralTablero();
+        this.tablero.generalOtros();
+
+        while (true) {
+            this.clearScreen();
+            if (this.ganarPartida){
+                
+                this.clearScreen();
+                        System.out.println();
+                        System.out.println(" ░▒▓███████▓▒░  ░▒▓██████▓▒░░ ▒▓███████▓▒░░ ▒▓███████▓▒░░ ▒▓████████▓▒░▒▓█▓▒░  ░▒▓█▓▒░▒▓█▓▒░▒▓█▓▒░  ░▒▓█▓▒░▒▓█▓▒░░▒▓███████▓▒░▒▓████████▓▒░▒▓████████▓▒░░▒▓███████▓▒░");
+                        System.out.println(" ░▒▓█▓▒░       ░▒▓█▓▒░░▒▓█▓▒ ░▒▓█▓▒░░▒▓█▓▒ ░▒▓█▓▒░░▒▓█▓▒ ░▒▓█▓▒░      ░▒▓█▓▒░  ░▒▓█▓▒░▒▓█▓▒░▒▓█▓▒░  ░▒▓█▓▒░▒▓█▓▒░▒▓█▓▒░         ░▒▓█▓▒░   ░▒▓█▓▒░       ░▒▓█▓▒░          ");
+                        System.out.println(" ░▒▓█▓▒░       ░▒▓█▓▒░░▒▓█▓▒ ░▒▓█▓▒░░▒▓█▓▒ ░▒▓█▓▒░░▒▓█▓▒ ░▒▓█▓▒░       ░▒▓█▓▒  ▒▓█▓▒░░▒▓█▓▒░ ▒▓█▓▒  ▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░         ░▒▓█▓▒░   ░▒▓█▓▒░       ░▒▓█▓▒░          ");
+                        System.out.println("  ░▒▓██████▓▒░ ░▒▓█▓▒░░▒▓█▓▒ ░▒▓███████▓▒░ ░▒▓███████▓▒░ ░▒▓██████▓▒░   ░▒▓█▓▒▒▓█▓▒░ ░▒▓█▓▒░ ░▒▓█▓▒▒▓█▓▒░ ░▒▓█▓▒░▒▓██████▓▒░    ░▒▓█▓▒░   ░▒▓██████▓▒░  ░▒▓██████▓▒░    ");
+                        System.out.println("        ░▒▓█▓▒ ░▒▓█▓▒░░▒▓█▓▒ ░▒▓█▓▒░░▒▓█▓▒ ░▒▓█▓▒░░▒▓█▓▒ ░▒▓█▓▒░         ░▒▓█▓▓█▓▒░  ░▒▓█▓▒░  ░▒▓█▓▓█▓▒░  ░▒▓█▓▒░     ░▒▓█▓▒░   ░▒▓█▓▒░   ░▒▓█▓▒░             ░▒▓█▓▒░    ");
+                        System.out.println("        ░▒▓█▓▒ ░▒▓█▓▒░░▒▓█▓▒ ░▒▓█▓▒░░▒▓█▓▒ ░▒▓█▓▒░░▒▓█▓▒ ░▒▓█▓▒░         ░▒▓█▓▓█▓▒░  ░▒▓█▓▒░  ░▒▓█▓▓█▓▒░  ░▒▓█▓▒░     ░▒▓█▓▒░   ░▒▓█▓▒░   ░▒▓█▓▒░             ░▒▓█▓▒░  ▒▓██▓▒ ▒▓██▓▒ ▒▓██▓▒ ");
+                        System.out.println(" ░▒▓███████▓▒░  ░▒▓██████▓▒░ ░▒▓███████▓▒░ ░▒▓█▓▒░░▒▓█▓▒ ░▒▓████████▓▒░   ░▒▓██▓▒░   ░▒▓█▓▒░   ░▒▓██▓▒░   ░▒▓█▓▒░▒▓███████▓▒    ░▒▓█▓▒░   ░▒▓████████▓▒░▒▓███████▓▒░   ▒▓██▓▒ ▒▓██▓▒ ▒▓██▓▒ ");
+                        System.out.println();
+                     break;
+            }
+
+            if (this.perderPartida) {
+
+                System.out.println("                                                                                                                                                                                                          \n           " +           
+                "                     ░▒▓██████▓▒░▒▓████████▓▒░▒▓███████▓▒░ ░▒▓██████▓▒░       ░▒▓██████████████▓▒░░▒▓█▓▒░░▒▓█▓▒░▒▓████████▓▒░▒▓███████▓▒░▒▓████████▓▒░▒▓████████▓▒░      ░▒▓██████████████▓▒░ ░▒▓██████▓▒░ ░▒▓███████▓▒░                       \n" +
+                "                    ░▒▓█▓▒░░▒▓█▓▒░ ░▒▓█▓▒░   ░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░      ░▒▓█▓▒░░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░      ░▒▓█▓▒░░▒▓█▓▒░ ░▒▓█▓▒░   ░▒▓█▓▒░             ░▒▓█▓▒░░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░                             \n" +
+                "                    ░▒▓█▓▒░░▒▓█▓▒░ ░▒▓█▓▒░   ░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░      ░▒▓█▓▒░░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░      ░▒▓█▓▒░░▒▓█▓▒░ ░▒▓█▓▒░   ░▒▓█▓▒░             ░▒▓█▓▒░░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░                              \n" +
+                "                    ░▒▓█▓▒░░▒▓█▓▒░ ░▒▓█▓▒░   ░▒▓███████▓▒░░▒▓████████▓▒░      ░▒▓█▓▒░░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░▒▓██████▓▒░ ░▒▓███████▓▒░  ░▒▓█▓▒░   ░▒▓██████▓▒░        ░▒▓█▓▒░░▒▓█▓▒░░▒▓█▓▒░▒▓████████▓▒░░▒▓██████▓▒░                        \n" +
+                "                    ░▒▓█▓▒░░▒▓█▓▒░ ░▒▓█▓▒░   ░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░      ░▒▓█▓▒░░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░      ░▒▓█▓▒░░▒▓█▓▒░ ░▒▓█▓▒░   ░▒▓█▓▒░             ░▒▓█▓▒░░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░      ░▒▓█▓▒░                       \n" +
+                "                    ░▒▓█▓▒░░▒▓█▓▒░ ░▒▓█▓▒░   ░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░      ░▒▓█▓▒░░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░      ░▒▓█▓▒░░▒▓█▓▒░ ░▒▓█▓▒░   ░▒▓█▓▒░             ░▒▓█▓▒░░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░      ░▒▓█▓▒░  ▒▓██▓▒ ▒▓██▓▒ ▒▓██▓▒  \n" +
+                "                     ░▒▓██████▓▒░  ░▒▓█▓▒░   ░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░      ░▒▓█▓▒░░▒▓█▓▒░░▒▓█▓▒░ ▒▓██████▓▒░░▒▓████████▓▒░▒▓█▓▒░░▒▓█▓▒░ ░▒▓█▓▒░   ░▒▓████████▓▒░      ░▒▓█▓▒░░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░▒▓███████▓▒░   ▒▓██▓▒ ▒▓██▓▒ ▒▓██▓▒  ");
+
+            }
+        
+            this.tablero.print();
         
         // Imprimir la información del jugador, asesino y soldado
-        System.out.println(this.talero.getJugador().toString());
-        System.out.println(this.talero.getAsesino().toString());
-        System.out.println(this.talero.getSoldado().toString());
+        System.out.println(this.tablero.getCoordenadaPJ()[0]+" "+this.tablero.getCoordenadaPJ()[1]);
+        
+        this.preguntarDireccionMovimiento();
+        }
+        
     }
+
     
 
 
