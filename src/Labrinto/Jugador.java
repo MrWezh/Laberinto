@@ -1,4 +1,7 @@
 package Labrinto;
+
+import java.util.Random;
+
 public class Jugador {
     
     private String Nombre;
@@ -36,6 +39,7 @@ public class Jugador {
         Thread.sleep(500);
         System.out.println("El Protagonista ataca al Enemigo!");
         return e.esAtacado(this);
+        
     }
 
     public boolean esAtacado(Enemigos e) throws InterruptedException {
@@ -47,6 +51,36 @@ public class Jugador {
         else {
             return atacar(e);
         }
+    }
+
+    public void sumarEstadistica()throws InterruptedException{
+    
+        
+        Random random = new Random();
+
+        int opcion = random.nextInt(2) +1; 
+
+        switch (opcion) {
+
+            case 1:
+            System.out.println("Obtuviste AGUA BENDITA +1 DE VIDA!");
+            this.vida += 1;
+            
+                break;
+            case 2:
+            System.out.println("Obtuviste FURIA +1 DE ATAQUE!");
+            this.ataque += 1;
+                break;
+            case 3:
+            System.out.println("Obtuviste PIEL DE HIERRO +1 DE ESCUDO!");
+            this.escudo += 1;
+                break;
+            default:
+                break;
+
+              
+                
+        } Thread.sleep(1000);
     }
     @Override
     public String toString() {

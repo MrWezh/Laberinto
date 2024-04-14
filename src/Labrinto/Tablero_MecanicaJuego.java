@@ -1,6 +1,7 @@
 package Labrinto;
 
 import java.util.Random;
+import java.util.Scanner;
 
 public class Tablero_MecanicaJuego extends Tablero{
 
@@ -11,6 +12,9 @@ public class Tablero_MecanicaJuego extends Tablero{
     private int numeroEnemigos=6;
     private int numeroSalida=1;
     private boolean[][] visionPJ;
+    private Scanner wz;
+
+    
 
     private int[] coordenadaPJ={0,0};
 
@@ -36,6 +40,7 @@ public class Tablero_MecanicaJuego extends Tablero{
         jugador = new Jugador();
         soldado = new Enemigos("Soldado esqueleto");
         asesino = new Enemigos("Asesino");
+        wz = new Scanner(System.in);
     }
 
     public Jugador getJugador() {
@@ -138,7 +143,10 @@ public class Tablero_MecanicaJuego extends Tablero{
 
     }
 
-    public int[] movimientoPJ(String movimiento){
+    public int[] movimientoPJ(){
+
+        System.out.print("Movimiento(w/a/s/d) :");
+        String movimiento = wz.next().toLowerCase();
 
         int[] mover = {0,0};
         
@@ -166,7 +174,59 @@ public class Tablero_MecanicaJuego extends Tablero{
         int filas = coordenadaPJ[0] + mover[0];
         int columnas = coordenadaPJ[1] + mover[1];
         int[] coordenadasMover = {filas, columnas};
-        return coordenadasMover;
+
+        if (filas< 0||columnas < 0|| 
+        filas >= this.getSize() ||
+        columnas >= this.getSize()|| 
+    this.getLaberinto()[filas][columnas] == Square.PARED) {
+        
+                System.out.println("---------MOVIMIENTO INCORRECTO---------");
+            return movimientoPJ();
+    }
+            else return coordenadasMover;
+    }
+
+    public boolean interacionPJ(int[] coordenadaMover) throws InterruptedException{
+        if (this.getLaberinto()[coordenadaMover[0]][coordenadaMover[1]] == Square.SOLDADO){
+            this.clearScreen();
+            
+            int vidaActual = this.getJugador().getVida();
+            this.getJugador().atacar(this.getSoldado());
+            int vidaDespues = this.getJugador().getVida();
+            System.out.println("----------------------------------------");
+            System.out.println("El enemigo te infringió "+(vidaActual-vidaDespues)+" de dañó!");
+            Thread.sleep(1000);
+
+        }
+        else if (this.getLaberinto()[coordenadaMover[0]][coordenadaMover[1]] == Square.ASESINO){
+            this.clearScreen();
+            int vidaActual = this.getJugador().getVida();
+            this.getAsesino().atacar(this.getJugador());
+            int vidaDespues = this.getJugador().getVida();
+            System.out.println("----------------------------------------");
+            System.out.println("El enemigo te infringió "+(vidaActual-vidaDespues)+" de dañó!");
+            Thread.sleep(2000);
+    
+        }
+
+        else if(this.getLaberinto()[coordenadaMover[0]][coordenadaMover[1]] == Square.RECOMPENSA){
+            this.clearScreen();
+            System.out.print("Esperando.");
+            for (int i = 0; i < 6; i++) {
+               
+                Thread.sleep(300);
+                System.out.print(".");
+            }
+            this.clearScreen();
+            this.getJugador().sumarEstadistica();
+           // this.moverse(casillaActual, coordenadaMover);  
+           
+           
+        }
+
+        if (this.getJugador().getVida() <= 0){
+            return true;
+        } else return false;
     }
 
     public void descubrirCasillas(int i, int j){
@@ -193,6 +253,26 @@ public class Tablero_MecanicaJuego extends Tablero{
 
 }
 
+public boolean moverse(int[] casillaActual, int[] coordenadaMover) throws InterruptedException{
+
+s
+    this.getLaberinto()[casillaActual[0]][casillaActual[1]] = Square.CAMINO;
+        this.setCoordenadaPJ(coordenadaMover);
+        if (this.getLaberinto()[coordenadaMover[0]][coordenadaMover[1]] == Square.SALIDA) {
+            return true ;
+
+        }else {
+            
+            this.getLaberinto()[coordenadaMover[0]][coordenadaMover[1]] = Square.PERSONAJE;
+            this.descubrirCasillas(coordenadaMover[0], coordenadaMover[1]);
+            return false;}
+
+
+   
+
+
+}
+
 
     public void print() {  
 
@@ -211,11 +291,11 @@ public class Tablero_MecanicaJuego extends Tablero{
             System.out.print("║");
              for (int j = 0; j < getLaberinto().length; j++) {
                 
-                /*if (!this.visionPJ[i][j]){
+                if (!this.visionPJ[i][j]){
                     System.out.print(" # ");
-                }*/
+                }
 
-                // else{
+                else{
                  Square symbol = this.getLaberinto()[i][j];
  
                  switch (symbol) {
@@ -242,7 +322,7 @@ public class Tablero_MecanicaJuego extends Tablero{
                          System.out.print(" 杀");
                         break;
                  }
-                //}
+                }
              }
              System.out.println("║");
          }
@@ -253,6 +333,11 @@ public class Tablero_MecanicaJuego extends Tablero{
 		System.out.println("╝");
 
         
+}
+
+private void clearScreen(){
+    System.out.print("\033[H\033[2J");
+    System.out.flush();
 }
 
 

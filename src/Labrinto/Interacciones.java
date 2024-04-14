@@ -1,4 +1,5 @@
 package Labrinto;
+import java.util.Random;
 import java.util.Scanner;
 
 
@@ -6,7 +7,7 @@ public class Interacciones {
 
     Tablero_MecanicaJuego tablero;
     Scanner wz;
-    private int puntosDeasignacion = 15;
+    private int puntosDeasignacion;
 
     
     
@@ -239,75 +240,17 @@ public class Interacciones {
     }
 
     public void preguntarDireccionMovimiento() throws InterruptedException{
-        wz.nextLine();
 
-        System.out.print("Movimiento(w/a/s/d) :");
-        String movimiento = wz.next().toLowerCase();
-
-        int[] coordenadaMover = this.tablero.movimientoPJ(movimiento);
+        int[] coordenadaMover = this.tablero.movimientoPJ();
         int[] casillaActual = this.tablero.getCoordenadaPJ();
 
-        if (coordenadaMover[0] < 0||coordenadaMover[1] < 0|| 
-            coordenadaMover[0] >= this.tablero.getSize() ||
-            coordenadaMover[1] >= this.tablero.getSize()|| 
-        this.tablero.getLaberinto()[coordenadaMover[0]][coordenadaMover[1]] == Square.PARED) {
-            
-                    System.out.println("---------MOVIMIENTO INCORRECTO---------");
-                    this.preguntarDireccionMovimiento();
-        }
-
-        else if (this.tablero.getLaberinto()[coordenadaMover[0]][coordenadaMover[1]] == Square.SOLDADO){
-            this.clearScreen();
-            this.tablero.getJugador().atacar(this.tablero.getSoldado());
-                    System.out.println("----------------------------------------");
-                    System.out.println(this.tablero.getJugador().toString());
-                    System.out.print("Pursa cualquiero teclado paracontinuar: ");
-
-                    this.moverse(casillaActual, coordenadaMover);
-            
-            String b = wz.next();
-
-
-            if (this.tablero.getJugador().getVida() <= 0){
-                this.perderPartida();
-            }else{
-            this.moverse(casillaActual, coordenadaMover);
-            }
-        }
-        else if (this.tablero.getLaberinto()[coordenadaMover[0]][coordenadaMover[1]] == Square.ASESINO){
-            this.clearScreen();
-            this.tablero.getAsesino().atacar(this.tablero.getJugador());
-            System.out.println("----------------------------------------");
-            System.out.println(this.tablero.getJugador().toString());
-            System.out.print("Pursa cualquiero teclado paracontinuar: ");
-    
-            String b = wz.next();
-            
-            if (this.tablero.getJugador().getVida() <= 0){
-                this.perderPartida();
-            }else{
-             this.moverse(casillaActual, coordenadaMover);
-            }
-        }
-
-        else {
-            this.moverse(casillaActual, coordenadaMover);
-        }
+        boolean perder = this.tablero.interacionPJ(coordenadaMover);
+        if(perder) perderPartida();
+         boolean ganar = this.tablero.moverse(casillaActual, coordenadaMover);
+         if(ganar) ganarPartida();
+        
 
     }
-
-
-    public void moverse(int[] casillaActual, int[] coordenadaMover) throws InterruptedException{
-        this.tablero.getLaberinto()[casillaActual[0]][casillaActual[1]] = Square.CAMINO;
-            this.tablero.setCoordenadaPJ(coordenadaMover);
-            if (this.tablero.getLaberinto()[coordenadaMover[0]][coordenadaMover[1]] == Square.SALIDA) {
-                this.ganarPartida();
-            }
-            this.tablero.getLaberinto()[coordenadaMover[0]][coordenadaMover[1]] = Square.PERSONAJE;
-            this.tablero.descubrirCasillas(coordenadaMover[0], coordenadaMover[1]);
-    }
-
-
 
     private void inicialJuego() throws InterruptedException {
         this.clearScreen();
@@ -382,12 +325,12 @@ public class Interacciones {
 
 
 
-        public void clearScreen(){
+        private void clearScreen(){
             System.out.print("\033[H\033[2J");
             System.out.flush();
         }
 
-        public void reset() throws InterruptedException{
+    public void reset() throws InterruptedException{
             this.tablero.getLaberinto()[this.tablero.getCoordenadaPJ()[0]][this.tablero.getCoordenadaPJ()[1]] = Square.CAMINO;
             int[] e = {0,0};
             this.tablero.getLaberinto()[0][0] = Square.PERSONAJE;
