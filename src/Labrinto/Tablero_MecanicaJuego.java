@@ -255,7 +255,7 @@ public class Tablero_MecanicaJuego extends Tablero{
 
 public boolean moverse(int[] casillaActual, int[] coordenadaMover) throws InterruptedException{
 
-s
+
     this.getLaberinto()[casillaActual[0]][casillaActual[1]] = Square.CAMINO;
         this.setCoordenadaPJ(coordenadaMover);
         if (this.getLaberinto()[coordenadaMover[0]][coordenadaMover[1]] == Square.SALIDA) {
