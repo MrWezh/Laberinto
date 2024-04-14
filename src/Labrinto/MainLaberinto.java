@@ -1,7 +1,7 @@
 package Labrinto;
 public class MainLaberinto {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
      
         Interacciones interacciones = new Interacciones();
 

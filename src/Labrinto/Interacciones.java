@@ -7,8 +7,7 @@ public class Interacciones {
     Tablero_MecanicaJuego tablero;
     Scanner wz;
     private int puntosDeasignacion = 15;
-    private boolean ganarPartida = false;
-    private boolean perderPartida = false;
+
     
     
     public Interacciones() {
@@ -28,8 +27,8 @@ public class Interacciones {
         return tablero;
     }
     
-    public void menuInical(){
-        
+    public void menuInical() throws InterruptedException{
+        this.clearScreen();
         System.out.println("1. EMPEZAR");
         System.out.println("2. ¿COMO JUAGAR?");
         System.out.println("0. SALLIR");
@@ -40,7 +39,7 @@ public class Interacciones {
         switch (opcion) {
             case 1:
             this.elegirDificurtad();
-            //this.crearPersonaje();
+            this.crearPersonaje();
             this.inicialJuego();
             
            
@@ -61,7 +60,7 @@ public class Interacciones {
 
     private void elegirDificurtad() {
         
-
+        this.clearScreen();
         System.out.println("Elige una dificultad para tu partida: ");
         System.out.println("---------------------------------------");
         System.out.println("1.FACIL");
@@ -81,7 +80,8 @@ public class Interacciones {
                 this.tablero.getAsesino().setEscudo(3);
                 this.tablero.getAsesino().setVida(3);
             
-                this.puntosDeasignacion -= 5;
+                this.puntosDeasignacion = 15; 
+
 
                 this.tablero.setNumeroEnemigos(6);
                 this.tablero.setNumeroRecompensa(6);
@@ -101,6 +101,7 @@ public class Interacciones {
                 this.tablero.setNumeroEnemigos(14);
                 this.tablero.setNumeroRecompensa(14);
                 this.tablero.setNumeroSalida(2);
+                this.puntosDeasignacion = 20; 
 
                 break;
             case 3:
@@ -113,7 +114,7 @@ public class Interacciones {
                 this.tablero.getAsesino().setEscudo(7);
                 this.tablero.getAsesino().setVida(5);
 
-                this.puntosDeasignacion += 5; 
+                this.puntosDeasignacion = 25; 
 
                 this.tablero.setNumeroEnemigos(20);
                 this.tablero.setNumeroRecompensa(20);
@@ -237,72 +238,86 @@ public class Interacciones {
             
     }
 
-    public void preguntarDireccionMovimiento(){
+    public void preguntarDireccionMovimiento() throws InterruptedException{
         wz.nextLine();
+
         System.out.print("Movimiento(w/a/s/d) :");
         String movimiento = wz.next().toLowerCase();
 
         int[] coordenadaMover = this.tablero.movimientoPJ(movimiento);
-
-
         int[] casillaActual = this.tablero.getCoordenadaPJ();
 
-        if (coordenadaMover[0]*coordenadaMover[1] < 0||this.tablero.getLaberinto()[coordenadaMover[0]][coordenadaMover[1]] == Square.PARED) {
+        if (coordenadaMover[0] < 0||coordenadaMover[1] < 0|| 
+            coordenadaMover[0] >= this.tablero.getSize() ||
+            coordenadaMover[1] >= this.tablero.getSize()|| 
+        this.tablero.getLaberinto()[coordenadaMover[0]][coordenadaMover[1]] == Square.PARED) {
             
                     System.out.println("---------MOVIMIENTO INCORRECTO---------");
                     this.preguntarDireccionMovimiento();
         }
 
-        else {
-            this.tablero.getLaberinto()[casillaActual[0]][casillaActual[1]] = Square.CAMINO;
-            this.tablero.setCoordenadaPJ(coordenadaMover);
-            if (this.tablero.getLaberinto()[coordenadaMover[0]][coordenadaMover[1]] == Square.SALIDA) {
-                this.ganarPartida = true;
-            }
+        else if (this.tablero.getLaberinto()[coordenadaMover[0]][coordenadaMover[1]] == Square.SOLDADO){
+            this.clearScreen();
+            this.tablero.getJugador().atacar(this.tablero.getSoldado());
+                    System.out.println("----------------------------------------");
+                    System.out.println(this.tablero.getJugador().toString());
+                    System.out.print("Pursa cualquiero teclado paracontinuar: ");
 
-            this.tablero.getLaberinto()[coordenadaMover[0]][coordenadaMover[1]] = Square.PERSONAJE;
+                    this.moverse(casillaActual, coordenadaMover);
             
+            String b = wz.next();
 
+
+            if (this.tablero.getJugador().getVida() <= 0){
+                this.perderPartida();
+            }else{
+            this.moverse(casillaActual, coordenadaMover);
+            }
+        }
+        else if (this.tablero.getLaberinto()[coordenadaMover[0]][coordenadaMover[1]] == Square.ASESINO){
+            this.clearScreen();
+            this.tablero.getAsesino().atacar(this.tablero.getJugador());
+            System.out.println("----------------------------------------");
+            System.out.println(this.tablero.getJugador().toString());
+            System.out.print("Pursa cualquiero teclado paracontinuar: ");
+    
+            String b = wz.next();
+            
+            if (this.tablero.getJugador().getVida() <= 0){
+                this.perderPartida();
+            }else{
+             this.moverse(casillaActual, coordenadaMover);
+            }
+        }
+
+        else {
+            this.moverse(casillaActual, coordenadaMover);
         }
 
     }
- 
 
-    private void inicialJuego() {
+
+    public void moverse(int[] casillaActual, int[] coordenadaMover) throws InterruptedException{
+        this.tablero.getLaberinto()[casillaActual[0]][casillaActual[1]] = Square.CAMINO;
+            this.tablero.setCoordenadaPJ(coordenadaMover);
+            if (this.tablero.getLaberinto()[coordenadaMover[0]][coordenadaMover[1]] == Square.SALIDA) {
+                this.ganarPartida();
+            }
+            this.tablero.getLaberinto()[coordenadaMover[0]][coordenadaMover[1]] = Square.PERSONAJE;
+            this.tablero.descubrirCasillas(coordenadaMover[0], coordenadaMover[1]);
+    }
+
+
+
+    private void inicialJuego() throws InterruptedException {
         this.clearScreen();
         this.tablero.GeneralTablero();
         this.tablero.generalOtros();
+        this.tablero.getVisionPJ()[0][0] = true; 
 
+        this.tablero.descubrirCasillas(0, 0);
         while (true) {
             this.clearScreen();
-            if (this.ganarPartida){
-                
-                this.clearScreen();
-                        System.out.println();
-                        System.out.println(" ░▒▓███████▓▒░  ░▒▓██████▓▒░░ ▒▓███████▓▒░░ ▒▓███████▓▒░░ ▒▓████████▓▒░▒▓█▓▒░  ░▒▓█▓▒░▒▓█▓▒░▒▓█▓▒░  ░▒▓█▓▒░▒▓█▓▒░░▒▓███████▓▒░▒▓████████▓▒░▒▓████████▓▒░░▒▓███████▓▒░");
-                        System.out.println(" ░▒▓█▓▒░       ░▒▓█▓▒░░▒▓█▓▒ ░▒▓█▓▒░░▒▓█▓▒ ░▒▓█▓▒░░▒▓█▓▒ ░▒▓█▓▒░      ░▒▓█▓▒░  ░▒▓█▓▒░▒▓█▓▒░▒▓█▓▒░  ░▒▓█▓▒░▒▓█▓▒░▒▓█▓▒░         ░▒▓█▓▒░   ░▒▓█▓▒░       ░▒▓█▓▒░          ");
-                        System.out.println(" ░▒▓█▓▒░       ░▒▓█▓▒░░▒▓█▓▒ ░▒▓█▓▒░░▒▓█▓▒ ░▒▓█▓▒░░▒▓█▓▒ ░▒▓█▓▒░       ░▒▓█▓▒  ▒▓█▓▒░░▒▓█▓▒░ ▒▓█▓▒  ▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░         ░▒▓█▓▒░   ░▒▓█▓▒░       ░▒▓█▓▒░          ");
-                        System.out.println("  ░▒▓██████▓▒░ ░▒▓█▓▒░░▒▓█▓▒ ░▒▓███████▓▒░ ░▒▓███████▓▒░ ░▒▓██████▓▒░   ░▒▓█▓▒▒▓█▓▒░ ░▒▓█▓▒░ ░▒▓█▓▒▒▓█▓▒░ ░▒▓█▓▒░▒▓██████▓▒░    ░▒▓█▓▒░   ░▒▓██████▓▒░  ░▒▓██████▓▒░    ");
-                        System.out.println("        ░▒▓█▓▒ ░▒▓█▓▒░░▒▓█▓▒ ░▒▓█▓▒░░▒▓█▓▒ ░▒▓█▓▒░░▒▓█▓▒ ░▒▓█▓▒░         ░▒▓█▓▓█▓▒░  ░▒▓█▓▒░  ░▒▓█▓▓█▓▒░  ░▒▓█▓▒░     ░▒▓█▓▒░   ░▒▓█▓▒░   ░▒▓█▓▒░             ░▒▓█▓▒░    ");
-                        System.out.println("        ░▒▓█▓▒ ░▒▓█▓▒░░▒▓█▓▒ ░▒▓█▓▒░░▒▓█▓▒ ░▒▓█▓▒░░▒▓█▓▒ ░▒▓█▓▒░         ░▒▓█▓▓█▓▒░  ░▒▓█▓▒░  ░▒▓█▓▓█▓▒░  ░▒▓█▓▒░     ░▒▓█▓▒░   ░▒▓█▓▒░   ░▒▓█▓▒░             ░▒▓█▓▒░  ▒▓██▓▒ ▒▓██▓▒ ▒▓██▓▒ ");
-                        System.out.println(" ░▒▓███████▓▒░  ░▒▓██████▓▒░ ░▒▓███████▓▒░ ░▒▓█▓▒░░▒▓█▓▒ ░▒▓████████▓▒░   ░▒▓██▓▒░   ░▒▓█▓▒░   ░▒▓██▓▒░   ░▒▓█▓▒░▒▓███████▓▒    ░▒▓█▓▒░   ░▒▓████████▓▒░▒▓███████▓▒░   ▒▓██▓▒ ▒▓██▓▒ ▒▓██▓▒ ");
-                        System.out.println();
-                     break;
-            }
-
-            if (this.perderPartida) {
-
-                System.out.println("                                                                                                                                                                                                          \n           " +           
-                "                     ░▒▓██████▓▒░▒▓████████▓▒░▒▓███████▓▒░ ░▒▓██████▓▒░       ░▒▓██████████████▓▒░░▒▓█▓▒░░▒▓█▓▒░▒▓████████▓▒░▒▓███████▓▒░▒▓████████▓▒░▒▓████████▓▒░      ░▒▓██████████████▓▒░ ░▒▓██████▓▒░ ░▒▓███████▓▒░                       \n" +
-                "                    ░▒▓█▓▒░░▒▓█▓▒░ ░▒▓█▓▒░   ░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░      ░▒▓█▓▒░░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░      ░▒▓█▓▒░░▒▓█▓▒░ ░▒▓█▓▒░   ░▒▓█▓▒░             ░▒▓█▓▒░░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░                             \n" +
-                "                    ░▒▓█▓▒░░▒▓█▓▒░ ░▒▓█▓▒░   ░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░      ░▒▓█▓▒░░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░      ░▒▓█▓▒░░▒▓█▓▒░ ░▒▓█▓▒░   ░▒▓█▓▒░             ░▒▓█▓▒░░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░                              \n" +
-                "                    ░▒▓█▓▒░░▒▓█▓▒░ ░▒▓█▓▒░   ░▒▓███████▓▒░░▒▓████████▓▒░      ░▒▓█▓▒░░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░▒▓██████▓▒░ ░▒▓███████▓▒░  ░▒▓█▓▒░   ░▒▓██████▓▒░        ░▒▓█▓▒░░▒▓█▓▒░░▒▓█▓▒░▒▓████████▓▒░░▒▓██████▓▒░                        \n" +
-                "                    ░▒▓█▓▒░░▒▓█▓▒░ ░▒▓█▓▒░   ░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░      ░▒▓█▓▒░░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░      ░▒▓█▓▒░░▒▓█▓▒░ ░▒▓█▓▒░   ░▒▓█▓▒░             ░▒▓█▓▒░░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░      ░▒▓█▓▒░                       \n" +
-                "                    ░▒▓█▓▒░░▒▓█▓▒░ ░▒▓█▓▒░   ░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░      ░▒▓█▓▒░░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░      ░▒▓█▓▒░░▒▓█▓▒░ ░▒▓█▓▒░   ░▒▓█▓▒░             ░▒▓█▓▒░░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░      ░▒▓█▓▒░  ▒▓██▓▒ ▒▓██▓▒ ▒▓██▓▒  \n" +
-                "                     ░▒▓██████▓▒░  ░▒▓█▓▒░   ░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░      ░▒▓█▓▒░░▒▓█▓▒░░▒▓█▓▒░ ▒▓██████▓▒░░▒▓████████▓▒░▒▓█▓▒░░▒▓█▓▒░ ░▒▓█▓▒░   ░▒▓████████▓▒░      ░▒▓█▓▒░░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░▒▓███████▓▒░   ▒▓██▓▒ ▒▓██▓▒ ▒▓██▓▒  ");
-
-            }
-        
             this.tablero.print();
         
         // Imprimir la información del jugador, asesino y soldado
@@ -314,6 +329,56 @@ public class Interacciones {
     }
 
     
+    public void ganarPartida() throws InterruptedException{
+        this.clearScreen();
+                        System.out.println(
+                  "           _                    _       _     _            _ \n"+
+                  "          | |                  (_)     (_)   | |          | |\n"+
+                  " ___  ___ | |__  _ __ _____   _____   ___ ___| |_ ___  ___| |\n"+
+                  "/ __|/ _ \\| '_ \\| '__/ _ \\ \\ / / \\ \\ / / / __| __/ _ \\/ __| |\n"+
+                  "\\__ \\ (_) | |_) | | |  __/\\ V /| |\\ V /| \\__ \\ ||  __/\\__ \\_|\n"+
+                  "|___/\\___/|_.__/|_|  \\___| \\_/ |_| \\_/ |_|___/\\__\\___||___(_)"
+                        );
+                        
+                        
+            System.out.println("----------------------------------------------------------------------");
+            System.out.println("¿Quieres jugar otra partida?(y/n)");
+            String opcion = wz.next().toLowerCase();
+            if(opcion.equals("y")) {
+                this.reset();
+                this.inicialJuego();}                        
+                        else if (opcion.equals("n")) System.exit(0);
+            else {
+                this.clearScreen();
+                System.out.println("----------OPCIÓN INCORRECTO------------");
+                ganarPartida();
+                }
+}
+
+    public void perderPartida() throws InterruptedException{
+        System.out.println(                                                                                                                                                                                                            
+                " _____ _                                         _                                    \n"+
+                "|  _  | |                                       | |                                  \n"+
+                "| | | | |_ _ __ __ _   _ __ ___  _   _  ___ _ __| |_ ___   _ __ ___   __ _ ___       \n"+
+                "| | | | __| '__/ _` | | '_ ` _ \\ | | | |/ _ \\ '__| __/ _ \\ | '_ ` _ \\ / _` / __|      \n"+
+                "\\ \\_/ / |_| | | (_| | | | | | | | |_| |  __/ |  | ||  __/ | | | | | | (_| \\__ \\_ _ _ \n"+
+                " \\___/ \\__|_|  \\__,_| |_| |_| |_|\\__,_|\\___|_|   \\__\\___| |_| |_| |_|\\__,_|___(_|_|_)\n ");
+
+                System.out.println("------------------------------------------------------------------------------------");
+                System.out.println("¿Quieres jugar otra partida?(y/n)");
+                String opcion = wz.next().toLowerCase();
+                if(opcion.equals("y")) {
+                    this.reset();
+                    this.inicialJuego();
+                }                      
+                            else if (opcion.equals("n")) System.exit(0);
+                else {
+                    this.clearScreen();
+                    System.out.println("----------OPCIÓN INCORRECTO------------");
+                    perderPartida();
+                    }
+
+    }
 
 
 
@@ -322,6 +387,17 @@ public class Interacciones {
             System.out.flush();
         }
 
-
+        public void reset() throws InterruptedException{
+            this.tablero.getLaberinto()[this.tablero.getCoordenadaPJ()[0]][this.tablero.getCoordenadaPJ()[1]] = Square.CAMINO;
+            int[] e = {0,0};
+            this.tablero.getLaberinto()[0][0] = Square.PERSONAJE;
+            this.tablero.setCoordenadaPJ(e);
+            this.tablero.getPosicionesCamino().clear();
+            this.menuInical();
+            
+        
+        
+            
+        }
 
 }

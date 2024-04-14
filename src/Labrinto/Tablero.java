@@ -58,7 +58,9 @@ public class Tablero {
                 this.laberinto[i][j] = Square.PARED;
             }
         }
-        this.laberinto[this.coordenadaICamino][this.coordenadaJCamino] = Square.PERSONAJE;
+        this.coordenadaICamino = 0;
+        this.coordenadaJCamino = 0;
+        this.laberinto[0][0] = Square.PERSONAJE;
 
         this.construirCamino();
         for (int i = 0; i < 3; i++) {

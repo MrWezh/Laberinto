@@ -34,8 +34,8 @@ public class Tablero_MecanicaJuego extends Tablero{
 
     public Tablero_MecanicaJuego() {
         jugador = new Jugador();
-        soldado = new Enemigos();
-        asesino = new Enemigos();
+        soldado = new Enemigos("Soldado esqueleto");
+        asesino = new Enemigos("Asesino");
     }
 
     public Jugador getJugador() {
@@ -165,14 +165,34 @@ public class Tablero_MecanicaJuego extends Tablero{
         }
         int filas = coordenadaPJ[0] + mover[0];
         int columnas = coordenadaPJ[1] + mover[1];
-        
         int[] coordenadasMover = {filas, columnas};
         return coordenadasMover;
     }
 
-    public void descubrirCasillas(){
-        
+    public void descubrirCasillas(int i, int j){
+
+    int[][] opciones = {
+            {-1, 0},
+            {0, -1},
+            {-1, -1},
+            {1, 0},
+            {0, 1},
+            {1, 1},
+            {-1, 1},
+            {1, -1}
+    };
+
+    for (int k = 0; k < opciones.length; k++) {
+        int filaVecina = i + opciones[k][0];
+        int columnaVecina = j + opciones[k][1];
+
+        if (filaVecina >= 0 &&columnaVecina >= 0&& filaVecina < this.visionPJ.length && columnaVecina < this.visionPJ[0].length) {
+            this.visionPJ[filaVecina][columnaVecina] = true;
+        }
     }
+
+}
+
 
     public void print() {  
 
@@ -181,10 +201,21 @@ public class Tablero_MecanicaJuego extends Tablero{
                  System.out.print(this.laberinto[i][j]+" ");
              }System.out.println();
          }*/
- 
+         System.out.println(this.jugador.toString());
+         System.out.print("╔");
+         for (int i = 0; i < getSize()*3; i++) {
+            System.out.print("═");	
+         }System.out.println("╗");
+
          for (int i = 0; i < getLaberinto().length; i++) {
+            System.out.print("║");
              for (int j = 0; j < getLaberinto().length; j++) {
- 
+                
+                /*if (!this.visionPJ[i][j]){
+                    System.out.print(" # ");
+                }*/
+
+                // else{
                  Square symbol = this.getLaberinto()[i][j];
  
                  switch (symbol) {
@@ -193,7 +224,7 @@ public class Tablero_MecanicaJuego extends Tablero{
                          break;
  
                      case CAMINO:
-                         System.out.print(" · ");
+                         System.out.print("   ");
                          break;
                      case PERSONAJE:
                         System.out.print(" 人");
@@ -211,11 +242,18 @@ public class Tablero_MecanicaJuego extends Tablero{
                          System.out.print(" 杀");
                         break;
                  }
+                //}
              }
-             System.out.println();
+             System.out.println("║");
          }
+         System.out.print("╚");
+		for (int i = 0; i < getSize()*3; i++) {
+			System.out.print("═");
+		}
+		System.out.println("╝");
 
         
 }
+
 
 }
