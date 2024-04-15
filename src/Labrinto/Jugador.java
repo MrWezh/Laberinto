@@ -38,17 +38,25 @@ public class Jugador {
 
     public boolean atacar(Enemigos e) throws InterruptedException {
         Thread.sleep(500);
-        System.out.println("El Protagonista ataca al Enemigo!");
+         System.out.println("Infringistes "+this.ataque+" de daño!");
+        
         return e.esAtacado(this);
         
     }
 
     public boolean esAtacado(Enemigos e) throws InterruptedException {
         Thread.sleep(500);
-        System.out.println("El Protagonista es atacado por el Enemigo!");
-        setEscudo(getEscudo() - e.getAtaque());
-        if (getEscudo() <= 0) setVida(getVida()-e.getAtaque());
-        if (getVida() <= 0) return true;
+        //System.out.println("El Protagonista es atacado por el Enemigo!");
+        
+        if (this.escudo > 0) {
+            int ataca = getEscudo() - e.getAtaque();
+            setEscudo(ataca);
+            if (ataca < 0) setVida(getVida() - e.getAtaque() + ataca);
+    
+        }
+        if(this.escudo == 0) setVida(getVida() - e.getAtaque());
+
+        if (getVida() == 0) return true;
         else {
             return atacar(e);
         }
@@ -59,7 +67,7 @@ public class Jugador {
         
         Random random = new Random();
 
-        int opcion = random.nextInt(2)+1; 
+        int opcion = random.nextInt(3)+1; 
 
         switch (opcion) {
 

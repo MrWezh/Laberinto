@@ -203,11 +203,11 @@ public class Tablero_MecanicaJuego extends Tablero{
         if (this.getLaberinto()[coordenadaMover[0]][coordenadaMover[1]] == Square.SOLDADO){
             this.clearScreen();
             
-            int vidaActual = this.getJugador().getVida() + this.jugador.getEscudo();;
+            int vidaActual = this.getJugador().getVida() + this.jugador.getEscudo();
             this.getJugador().atacar(this.getSoldado());
-            int vidaDespues = this.getJugador().getVida() + this.jugador.getEscudo();;
+            int vidaDespues = this.getJugador().getVida() + this.jugador.getEscudo();
             System.out.println("----------------------------------------");
-            System.out.println("El enemigo te infringió "+(vidaActual-vidaDespues)+" de dañó!");
+            System.out.println("Recibistes un total de "+(vidaActual-vidaDespues)+" de dañó!");
             Thread.sleep(2000);
 
         }
@@ -217,7 +217,7 @@ public class Tablero_MecanicaJuego extends Tablero{
             this.getAsesino().atacar(this.getJugador());
             int vidaDespues = this.getJugador().getVida() + this.jugador.getEscudo();
             System.out.println("----------------------------------------");
-            System.out.println("El enemigo te infringió "+(vidaActual-vidaDespues)+" de dañó!");
+            System.out.println("Recibistes un total de "+(vidaActual-vidaDespues)+" de dañó!");
             Thread.sleep(2000);
     
         }

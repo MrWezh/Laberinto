@@ -33,18 +33,23 @@ public class Enemigos {
 
     public boolean atacar(Jugador e) throws InterruptedException {
         Thread.sleep(500);
-        System.out.println("El Enemigo ataca al protagonista!");
+        System.out.println("El enemigo te infringió "+this.ataque+" de daño!");
+        
         return e.esAtacado(this);
     }
 
     public boolean esAtacado(Jugador e) throws InterruptedException {
         Thread.sleep(500);
-        System.out.println("El Enemigo es atacado por el protagonista!");
-        setEscudo(getEscudo() - e.getAtaque());
-
-        if (getEscudo() <= 0)  setVida(getVida() - e.getAtaque());
-
-        if (getVida() <= 0) return true;
+        //System.out.println("El Enemigo es atacado por el protagonista!");
+        
+        if (this.escudo > 0) {
+            int ataca = getEscudo() - e.getAtaque();
+            setEscudo(ataca);
+            if (ataca < 0) setVida(getVida() - e.getAtaque() + ataca);
+    
+        }
+        if(this.escudo == 0) setVida(getVida() - e.getAtaque());
+        if (getVida() == 0) return true;
         else {
             return atacar(e);
         }
