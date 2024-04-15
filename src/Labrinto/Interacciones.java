@@ -211,6 +211,7 @@ public class Interacciones {
                         
               }
                     break;
+
                 case "ataque":
                 System.out.println("Indroduzca el "+nombre+" que tendrá tu PJ:");
                 asignarPuntos = wz.nextInt();
@@ -223,6 +224,7 @@ public class Interacciones {
                        
               }
                     break; 
+
                 case "escudo":
                 System.out.println("Indroduzca el "+nombre+" que tendrá tu PJ:");
                 asignarPuntos = wz.nextInt();
@@ -235,8 +237,6 @@ public class Interacciones {
                         this.puntosDeasignacion -= asignarPuntos;
                         
               } 
-                    break;
-                default:
                     break;
             }
             return asignarPuntos;

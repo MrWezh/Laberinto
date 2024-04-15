@@ -202,22 +202,27 @@ public class Tablero_MecanicaJuego extends Tablero{
     public boolean interacionPJ(int[] coordenadaMover) throws InterruptedException{
         if (this.getLaberinto()[coordenadaMover[0]][coordenadaMover[1]] == Square.SOLDADO){
             this.clearScreen();
-            
+            Enemigos soldadoViejo = this.soldado;
             int vidaActual = this.getJugador().getVida() + this.jugador.getEscudo();
             this.getJugador().atacar(this.getSoldado());
             int vidaDespues = this.getJugador().getVida() + this.jugador.getEscudo();
+            this.soldado = soldadoViejo;
             System.out.println("----------------------------------------");
-            System.out.println("Recibistes un total de "+(vidaActual-vidaDespues)+" de dañó!");
+            System.out.println("Recibistes un total de "+(vidaActual-vidaDespues)+" de daño!"+vidaActual+" "+vidaDespues);
+           
             Thread.sleep(2000);
 
         }
         else if (this.getLaberinto()[coordenadaMover[0]][coordenadaMover[1]] == Square.ASESINO){
             this.clearScreen();
+            Enemigos asesinoViejo = this.asesino;
             int vidaActual = this.getJugador().getVida() + this.jugador.getEscudo();
             this.getAsesino().atacar(this.getJugador());
             int vidaDespues = this.getJugador().getVida() + this.jugador.getEscudo();
+            this.asesino = asesinoViejo;
+
             System.out.println("----------------------------------------");
-            System.out.println("Recibistes un total de "+(vidaActual-vidaDespues)+" de dañó!");
+            System.out.println("Recibistes un total de "+(vidaActual-vidaDespues)+" de dañó!"+vidaActual+" "+vidaDespues);
             Thread.sleep(2000);
     
         }
