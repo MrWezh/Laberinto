@@ -13,6 +13,7 @@ public class Tablero_MecanicaJuego extends Tablero{
     private int numeroSalida=1;
     private boolean[][] visionPJ;
     private Scanner wz;
+    private int escudoInicialPJ;
 
     
 
@@ -20,6 +21,14 @@ public class Tablero_MecanicaJuego extends Tablero{
 
     
     
+    public int getEscudoInicialPJ() {
+        return escudoInicialPJ;
+    }
+
+    public void setEscudoInicialPJ(int escudoInicialPJ) {
+        this.escudoInicialPJ = escudoInicialPJ;
+    }
+
     public boolean[][] getVisionPJ() {
         return visionPJ;
     }
@@ -91,7 +100,7 @@ public class Tablero_MecanicaJuego extends Tablero{
         this.numeroSalida = numeroSalida;
     }
 
-    public void generalOtros(){
+    public void generalEnemigosYRecompensas(){
         this.visionPJ = new boolean[getSize()][getSize()];
 
         if (numeroSalida == 1)this.generar(getSize()/2 + 3,1, Square.SALIDA, numeroSalida);
@@ -104,7 +113,7 @@ public class Tablero_MecanicaJuego extends Tablero{
             this.generar(getSize()/2 + 3,2, Square.SALIDA, 1);
             this.generar(getSize()/2 + 3,3, Square.SALIDA, 1);
         }
-        this.generar(3,1, Square.RECOMPENSA, numeroRecompensa);
+        this.generar(0,1, Square.RECOMPENSA, numeroRecompensa);
         
         Square[] enemigo = {Square.ASESINO, Square.SOLDADO};
         
@@ -143,8 +152,9 @@ public class Tablero_MecanicaJuego extends Tablero{
 
     }
 
-    public int[] movimientoPJ(){
+    public int[] movimientoPJ() throws InterruptedException{
 
+        
         System.out.print("Movimiento(w/a/s/d) :");
         String movimiento = wz.next().toLowerCase();
 
@@ -179,8 +189,11 @@ public class Tablero_MecanicaJuego extends Tablero{
         filas >= this.getSize() ||
         columnas >= this.getSize()|| 
     this.getLaberinto()[filas][columnas] == Square.PARED) {
-        
-                System.out.println("---------MOVIMIENTO INCORRECTO---------");
+            
+            System.out.println("---------MOVIMIENTO INCORRECTO---------");
+            Thread.sleep(500);
+            this.clearScreen();
+            this.print();
             return movimientoPJ();
     }
             else return coordenadasMover;
@@ -190,19 +203,19 @@ public class Tablero_MecanicaJuego extends Tablero{
         if (this.getLaberinto()[coordenadaMover[0]][coordenadaMover[1]] == Square.SOLDADO){
             this.clearScreen();
             
-            int vidaActual = this.getJugador().getVida();
+            int vidaActual = this.getJugador().getVida() + this.jugador.getEscudo();;
             this.getJugador().atacar(this.getSoldado());
-            int vidaDespues = this.getJugador().getVida();
+            int vidaDespues = this.getJugador().getVida() + this.jugador.getEscudo();;
             System.out.println("----------------------------------------");
             System.out.println("El enemigo te infringió "+(vidaActual-vidaDespues)+" de dañó!");
-            Thread.sleep(1000);
+            Thread.sleep(2000);
 
         }
         else if (this.getLaberinto()[coordenadaMover[0]][coordenadaMover[1]] == Square.ASESINO){
             this.clearScreen();
-            int vidaActual = this.getJugador().getVida();
+            int vidaActual = this.getJugador().getVida() + this.jugador.getEscudo();
             this.getAsesino().atacar(this.getJugador());
-            int vidaDespues = this.getJugador().getVida();
+            int vidaDespues = this.getJugador().getVida() + this.jugador.getEscudo();
             System.out.println("----------------------------------------");
             System.out.println("El enemigo te infringió "+(vidaActual-vidaDespues)+" de dañó!");
             Thread.sleep(2000);
@@ -211,7 +224,7 @@ public class Tablero_MecanicaJuego extends Tablero{
 
         else if(this.getLaberinto()[coordenadaMover[0]][coordenadaMover[1]] == Square.RECOMPENSA){
             this.clearScreen();
-            System.out.print("Esperando.");
+            System.out.print("Recibiendo recompensa.");
             for (int i = 0; i < 6; i++) {
                
                 Thread.sleep(300);
@@ -265,22 +278,12 @@ public boolean moverse(int[] casillaActual, int[] coordenadaMover) throws Interr
             
             this.getLaberinto()[coordenadaMover[0]][coordenadaMover[1]] = Square.PERSONAJE;
             this.descubrirCasillas(coordenadaMover[0], coordenadaMover[1]);
+           if (this.jugador.getEscudo() < this.escudoInicialPJ) this.jugador.setEscudo(this.jugador.getEscudo()+1);
             return false;}
-
-
-   
-
-
 }
-
 
     public void print() {  
 
-        /* for (int i = 0; i < laberinto.length; i++) {
-             for (int j = 0; j < laberinto.length; j++) {
-                 System.out.print(this.laberinto[i][j]+" ");
-             }System.out.println();
-         }*/
          System.out.println(this.jugador.toString());
          System.out.print("╔");
          for (int i = 0; i < getSize()*3; i++) {

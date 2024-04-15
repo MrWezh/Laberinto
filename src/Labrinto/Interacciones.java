@@ -73,15 +73,16 @@ public class Interacciones {
         switch (opcion) {
             case 1:
                 this.tablero.setSize(10);
+
                 this.tablero.getSoldado().setAtaque(1);
                 this.tablero.getSoldado().setEscudo(5);
-                this.tablero.getSoldado().setVida(5);
+                this.tablero.getSoldado().setVida(10);
 
-                this.tablero.getAsesino().setAtaque(3);
+                this.tablero.getAsesino().setAtaque(4);
                 this.tablero.getAsesino().setEscudo(3);
                 this.tablero.getAsesino().setVida(3);
             
-                this.puntosDeasignacion = 15; 
+                this.puntosDeasignacion = 10;
 
 
                 this.tablero.setNumeroEnemigos(6);
@@ -91,9 +92,9 @@ public class Interacciones {
                 break;
             case 2:
                 this.tablero.setSize(15);
-                this.tablero.getSoldado().setAtaque(6);
-                this.tablero.getSoldado().setEscudo(6);
-                this.tablero.getSoldado().setVida(8);
+                this.tablero.getSoldado().setAtaque(3);
+                this.tablero.getSoldado().setEscudo(10);
+                this.tablero.getSoldado().setVida(10);
 
                 this.tablero.getAsesino().setAtaque(8);
                 this.tablero.getAsesino().setEscudo(0);
@@ -102,20 +103,20 @@ public class Interacciones {
                 this.tablero.setNumeroEnemigos(14);
                 this.tablero.setNumeroRecompensa(14);
                 this.tablero.setNumeroSalida(2);
-                this.puntosDeasignacion = 20; 
+                this.puntosDeasignacion = 10; 
 
                 break;
             case 3:
                 this.tablero.setSize(20);
                 this.tablero.getSoldado().setAtaque(3);
-                this.tablero.getSoldado().setEscudo(6);
+                this.tablero.getSoldado().setEscudo(20);
                 this.tablero.getSoldado().setVida(24);
 
                 this.tablero.getAsesino().setAtaque(9);
                 this.tablero.getAsesino().setEscudo(7);
                 this.tablero.getAsesino().setVida(5);
 
-                this.puntosDeasignacion = 25; 
+                this.puntosDeasignacion = 10; 
 
                 this.tablero.setNumeroEnemigos(20);
                 this.tablero.setNumeroRecompensa(20);
@@ -136,7 +137,8 @@ public class Interacciones {
         this.clearScreen();
        this.indroducirNombrePJ();
        int vida = this.indroducirVidaAtaqueEscudoPJ("vida");
-       int ataque = this.indroducirVidaAtaqueEscudoPJ("ataque");
+       int ataque = 0;
+       if(puntosDeasignacion != 0)ataque = this.indroducirVidaAtaqueEscudoPJ("ataque");
        int escudo = 0;
        if(puntosDeasignacion != 0){
        escudo = this.indroducirVidaAtaqueEscudoPJ("escudo");
@@ -160,6 +162,7 @@ public class Interacciones {
         this.tablero.getJugador().setVida(vida);
         this.tablero.getJugador().setAtaque(ataque);
         this.tablero.getJugador().setEscudo(escudo);
+        this.tablero.setEscudoInicialPJ(escudo);
         break;}
        else{
         System.out.println("----------OPCIÓN INCORRECTO------------");
@@ -198,9 +201,10 @@ public class Interacciones {
                 case "vida":
                 System.out.println("Indroduzca la "+nombre+" que tendrá tu PJ:");
                 asignarPuntos = wz.nextInt();
-                if (asignarPuntos > this.puntosDeasignacion-4||asignarPuntos<0) {
+                if (asignarPuntos > this.puntosDeasignacion||asignarPuntos<=0) {
                     System.out.println("----------OPCIÓN INCORRECTO------------");
-                    System.out.println(nombre+" máxima: "+ (this.puntosDeasignacion-4));
+                    System.out.println(nombre+" máxima: "+ (this.puntosDeasignacion));
+                    System.out.println(nombre+" mínima: "+ 1);
                     indroducirVidaAtaqueEscudoPJ("vida");
                     }else{
                         this.puntosDeasignacion -= asignarPuntos;
@@ -255,7 +259,7 @@ public class Interacciones {
     private void inicialJuego() throws InterruptedException {
         this.clearScreen();
         this.tablero.GeneralTablero();
-        this.tablero.generalOtros();
+        this.tablero.generalEnemigosYRecompensas();
         this.tablero.getVisionPJ()[0][0] = true; 
 
         this.tablero.descubrirCasillas(0, 0);
@@ -303,7 +307,7 @@ public class Interacciones {
                 " _____ _                                         _                                    \n"+
                 "|  _  | |                                       | |                                  \n"+
                 "| | | | |_ _ __ __ _   _ __ ___  _   _  ___ _ __| |_ ___   _ __ ___   __ _ ___       \n"+
-                "| | | | __| '__/ _` | | '_ ` _ \\ | | | |/ _ \\ '__| __/ _ \\ | '_ ` _ \\ / _` / __|      \n"+
+                "| | | | __| '__/ _` | | '_ ` _ \\| | | |/ _ \\ '__| __/ _ \\ | '_ ` _ \\ / _` / __|      \n"+
                 "\\ \\_/ / |_| | | (_| | | | | | | | |_| |  __/ |  | ||  __/ | | | | | | (_| \\__ \\_ _ _ \n"+
                 " \\___/ \\__|_|  \\__,_| |_| |_| |_|\\__,_|\\___|_|   \\__\\___| |_| |_| |_|\\__,_|___(_|_|_)\n ");
 

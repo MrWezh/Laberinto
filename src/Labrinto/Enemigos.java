@@ -39,8 +39,10 @@ public class Enemigos {
 
     public boolean esAtacado(Jugador e) throws InterruptedException {
         Thread.sleep(500);
-        System.out.println("El Enemigo es atacador por el protagonista!");
-        setVida(getVida() - e.getAtaque());
+        System.out.println("El Enemigo es atacado por el protagonista!");
+        setEscudo(getEscudo() - e.getAtaque());
+
+        if (getEscudo() <= 0)  setVida(getVida() - e.getAtaque());
 
         if (getVida() <= 0) return true;
         else {

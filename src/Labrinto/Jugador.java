@@ -13,7 +13,8 @@ public class Jugador {
         return escudo;
     }
     public void setEscudo(int escudo) {
-        this.escudo = escudo;
+        if (escudo < 0) this.escudo = 0;
+        else this.escudo = escudo;
     }
     public String getNombre() {
         return Nombre;
@@ -45,8 +46,8 @@ public class Jugador {
     public boolean esAtacado(Enemigos e) throws InterruptedException {
         Thread.sleep(500);
         System.out.println("El Protagonista es atacado por el Enemigo!");
-        setVida(getVida() - e.getAtaque());
-
+        setEscudo(getEscudo() - e.getAtaque());
+        if (getEscudo() <= 0) setVida(getVida()-e.getAtaque());
         if (getVida() <= 0) return true;
         else {
             return atacar(e);
@@ -58,7 +59,7 @@ public class Jugador {
         
         Random random = new Random();
 
-        int opcion = random.nextInt(2) +1; 
+        int opcion = random.nextInt(2)+1; 
 
         switch (opcion) {
 
