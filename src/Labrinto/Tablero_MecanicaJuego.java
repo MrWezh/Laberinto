@@ -14,13 +14,37 @@ public class Tablero_MecanicaJuego extends Tablero{
     private boolean[][] visionPJ;
     private Scanner wz;
     private int escudoInicialPJ;
-
-    
-
     private int[] coordenadaPJ={0,0};
 
-    
-    
+    private int[] estacEnemigoAsesino;
+    private int[] estacEnemigoSoldado;
+
+    public Tablero_MecanicaJuego() {
+        this.jugador = new Jugador();
+        this.soldado = new Enemigos("Soldado esqueleto");
+        this.asesino = new Enemigos("Asesino");
+
+        this.estacEnemigoAsesino = new int[3];
+        this.estacEnemigoSoldado = new int[3];
+        wz = new Scanner(System.in);
+    }
+
+    public int[] getEstacEnemigoSoldado() {
+        return estacEnemigoSoldado;
+    }
+
+    public void setEstacEnemigoSoldado(int[] estacEnemigoSoldado) {
+        this.estacEnemigoSoldado = estacEnemigoSoldado;
+    }
+
+    public int[] getEstacEnemigoAsesino() {
+        return estacEnemigoAsesino;
+    }
+
+    public void setEstacEnemigoAsesino(int[] estacEnemigo) {
+        this.estacEnemigoAsesino = estacEnemigo;
+    }
+
     public int getEscudoInicialPJ() {
         return escudoInicialPJ;
     }
@@ -45,12 +69,7 @@ public class Tablero_MecanicaJuego extends Tablero{
         this.coordenadaPJ = coordenadaPJ;
     }
 
-    public Tablero_MecanicaJuego() {
-        jugador = new Jugador();
-        soldado = new Enemigos("Soldado esqueleto");
-        asesino = new Enemigos("Asesino");
-        wz = new Scanner(System.in);
-    }
+
 
     public Jugador getJugador() {
         return jugador;
@@ -202,27 +221,35 @@ public class Tablero_MecanicaJuego extends Tablero{
     public boolean interacionPJ(int[] coordenadaMover) throws InterruptedException{
         if (this.getLaberinto()[coordenadaMover[0]][coordenadaMover[1]] == Square.SOLDADO){
             this.clearScreen();
-            Enemigos soldadoViejo = this.soldado;
+            System.out.println(this.soldado.toString());
+            System.out.println(this.jugador.toString());
+            int[] estacEnemigo = this.estacEnemigoSoldado; 
             int vidaActual = this.getJugador().getVida() + this.jugador.getEscudo();
             this.getJugador().atacar(this.getSoldado());
             int vidaDespues = this.getJugador().getVida() + this.jugador.getEscudo();
-            this.soldado = soldadoViejo;
+            this.soldado.setEstadisticaEnemigo(estacEnemigo);
             System.out.println("----------------------------------------");
-            System.out.println("Recibistes un total de "+(vidaActual-vidaDespues)+" de daño!");
+            System.out.println("Recibistes un total de "+(vidaActual-vidaDespues)+" de daño!"+" "+vidaActual+" "+vidaDespues);
+            wz.nextLine();
+            String a =  wz.nextLine();
            
             Thread.sleep(2000);
 
         }
         else if (this.getLaberinto()[coordenadaMover[0]][coordenadaMover[1]] == Square.ASESINO){
             this.clearScreen();
-            Enemigos asesinoViejo = this.asesino;
+           System.out.println(this.asesino.toString());
+            System.out.println(this.jugador.toString());
+            int[] estacEnemigo = this.estacEnemigoAsesino; 
             int vidaActual = this.getJugador().getVida() + this.jugador.getEscudo();
             this.getAsesino().atacar(this.getJugador());
             int vidaDespues = this.getJugador().getVida() + this.jugador.getEscudo();
-            this.asesino = asesinoViejo;
+            this.asesino.setEstadisticaEnemigo(estacEnemigo);
 
             System.out.println("----------------------------------------");
-            System.out.println("Recibistes un total de "+(vidaActual-vidaDespues)+" de dañó!"+vidaActual+" "+vidaDespues);
+            System.out.println("Recibistes un total de "+(vidaActual-vidaDespues)+" de dañó!");
+            wz.nextLine();
+            String a =  wz.nextLine();
             Thread.sleep(2000);
     
         }
@@ -238,7 +265,6 @@ public class Tablero_MecanicaJuego extends Tablero{
             this.clearScreen();
             this.getJugador().sumarEstadistica();
            // this.moverse(casillaActual, coordenadaMover);  
-           
            
         }
 
@@ -340,7 +366,8 @@ public boolean moverse(int[] casillaActual, int[] coordenadaMover) throws Interr
 		}
 		System.out.println("╝");
 
-        
+        System.out.println(this.asesino.toString());
+        System.out.println(this.soldado.toString());
 }
 
 private void clearScreen(){

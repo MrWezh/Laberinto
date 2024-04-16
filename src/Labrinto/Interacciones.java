@@ -39,7 +39,9 @@ public class Interacciones {
 
         switch (opcion) {
             case 1:
-            this.elegirDificurtad();
+
+            this.elegirDificurtad();      
+            this.indroducirNombrePJ();      
             this.crearPersonaje();
             this.inicialJuego();
             
@@ -69,21 +71,26 @@ public class Interacciones {
         System.out.println("3.DIFÍCIL");
 
         int opcion = wz.nextInt();
-
+        int[] estacAsesino = new int[3];
+        int[] estacSoldado = new int[3];
         switch (opcion) {
             case 1:
                 this.tablero.setSize(10);
 
+                this.tablero.getSoldado().setVida(10);
                 this.tablero.getSoldado().setAtaque(1);
                 this.tablero.getSoldado().setEscudo(5);
-                this.tablero.getSoldado().setVida(10);
 
+                this.tablero.getAsesino().setVida(3);
                 this.tablero.getAsesino().setAtaque(4);
                 this.tablero.getAsesino().setEscudo(3);
-                this.tablero.getAsesino().setVida(3);
             
                 this.puntosDeasignacion = 10;
+                int[] a = {10, 1, 5};
+                int[] b = {3, 4, 3};
 
+                estacSoldado = a;
+                estacAsesino = b; 
 
                 this.tablero.setNumeroEnemigos(6);
                 this.tablero.setNumeroRecompensa(6);
@@ -100,23 +107,37 @@ public class Interacciones {
                 this.tablero.getAsesino().setEscudo(0);
                 this.tablero.getAsesino().setVida(5);
 
+                int[] c = {10, 3, 10};
+                int[] d = {5, 8, 0};
+                
+                estacSoldado = c;
+                estacAsesino = d; 
+                
+                this.puntosDeasignacion = 10; 
+
                 this.tablero.setNumeroEnemigos(14);
                 this.tablero.setNumeroRecompensa(14);
                 this.tablero.setNumeroSalida(2);
-                this.puntosDeasignacion = 10; 
+                
 
                 break;
             case 3:
                 this.tablero.setSize(20);
                 this.tablero.getSoldado().setAtaque(3);
                 this.tablero.getSoldado().setEscudo(20);
-                this.tablero.getSoldado().setVida(24);
+                this.tablero.getSoldado().setVida(10);
 
                 this.tablero.getAsesino().setAtaque(9);
                 this.tablero.getAsesino().setEscudo(7);
                 this.tablero.getAsesino().setVida(5);
 
-                this.puntosDeasignacion = 10; 
+                int[] e = {10, 3, 20};
+                int[] f = {5, 9, 7};
+                
+                estacSoldado = e;
+                estacAsesino = f;
+
+                this.puntosDeasignacion = 15; 
 
                 this.tablero.setNumeroEnemigos(20);
                 this.tablero.setNumeroRecompensa(20);
@@ -130,21 +151,24 @@ public class Interacciones {
                 break;
         }
 
-        
+        this.tablero.setEstacEnemigoAsesino(estacAsesino);
+        this.tablero.setEstacEnemigoSoldado(estacSoldado);
     }
 
     private void crearPersonaje() {
         this.clearScreen();
-       this.indroducirNombrePJ();
+      int guardarPuntosDeAsignacion = this.puntosDeasignacion;
+      this.clearScreen();
        int vida = this.indroducirVidaAtaqueEscudoPJ("vida");
-       if (vida == 0) {
+           if (vida == 0) {
+        System.out.println("----------OPCIÓN INCORRECTO------------");
         System.out.println("vida máxima: "+this.puntosDeasignacion);
         System.out.println("vida mínima: 1");
-        System.out.println("-------------------------------------");
         vida = this.indroducirVidaAtaqueEscudoPJ("vida");
+        this.puntosDeasignacion -= vida;
        }
        else this.puntosDeasignacion -= vida;
-       
+
        int ataque = 0;
        if(puntosDeasignacion != 0){ataque = this.indroducirVidaAtaqueEscudoPJ("ataque");
        this.puntosDeasignacion -= ataque;}
@@ -153,35 +177,45 @@ public class Interacciones {
        escudo = this.indroducirVidaAtaqueEscudoPJ("escudo");
         this.puntosDeasignacion -= escudo;
     }
-
-      
-       while (true){
-
+    String yesno = "";
+    boolean fin = false;
+       while (!fin){
+        System.out.println("---------------------------------------");
         System.out.println("Nombre de tu personaje: "+this.tablero.getJugador().getNombre());
         System.out.println("[vida: "+vida+" | ataque: "+ataque+" | escudo: "+escudo+"]");
 
        System.out.println("¿Estas deacuerdo con la confuguración de tu PJ?(y/n)");
-       String yesno = wz.next().toLowerCase();
+       yesno = wz.next().toLowerCase();
 
-       if(yesno.equals("n")){
-        this.puntosDeasignacion = vida + ataque + escudo;
-        this.clearScreen();
-        crearPersonaje();
+        
+       if (!(yesno.equals("y")||yesno.equals("n"))){
+        System.out.println("----------OPCIÓN INCORRECTO------------");
        }
-       else if (yesno.equals("y")){
+       else fin = true;
+    }
+    switch (yesno) {
+        case "y":
         this.tablero.getJugador().setVida(vida);
         this.tablero.getJugador().setAtaque(ataque);
         this.tablero.getJugador().setEscudo(escudo);
         this.tablero.setEscudoInicialPJ(escudo);
-        break;}
-       else{
-        System.out.println("----------OPCIÓN INCORRECTO------------");
-       }
-    }this.clearScreen();
+            break;
+        case "n":
+        this.puntosDeasignacion = guardarPuntosDeAsignacion;
+        this.clearScreen();
+        crearPersonaje();
+            break;
+        
     }
+    
+    
+    this.clearScreen();
+    }
+
 
     public void indroducirNombrePJ(){
         wz.nextLine();
+        
         System.out.println("Indroduzca el nombre que tendrá tu PJ:");
         String nombre = wz.nextLine();
         
@@ -198,7 +232,7 @@ public class Interacciones {
         }
     }
     
-
+    //metodo para asignar estadísticas del personaje.
     public int indroducirVidaAtaqueEscudoPJ(String nombre){
        
         int puntos = this.puntosDeasignacion;

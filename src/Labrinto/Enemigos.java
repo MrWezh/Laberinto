@@ -6,8 +6,26 @@ public class Enemigos {
     private int vida; 
     private int ataque;
     private int escudo;
+
+    private int[] estadisticaEnemigo;
+
+ 
+    Enemigos(){
+        this.estadisticaEnemigo = new int[3];
+        
+    }
     
 
+    public int[] getEstadisticaEnemigo() {
+        return estadisticaEnemigo;
+    }
+    public void setEstadisticaEnemigo(int[] estadisticaEnemigo) {
+        this.estadisticaEnemigo = estadisticaEnemigo;
+        this.vida = estadisticaEnemigo[0];
+        this.ataque = estadisticaEnemigo[1];
+        this.escudo = estadisticaEnemigo[2];
+
+    }
     public Enemigos(String nombre) {
         this.nombre = nombre;
     }
@@ -28,7 +46,8 @@ public class Enemigos {
         return escudo;
     }
     public void setEscudo(int escudo) {
-        this.escudo = escudo;
+        if (escudo < 0) this.escudo = 0;
+        else this.escudo = escudo;
     }
 
     public boolean atacar(Jugador e) throws InterruptedException {
@@ -41,16 +60,18 @@ public class Enemigos {
     public boolean esAtacado(Jugador e) throws InterruptedException {
         Thread.sleep(500);
         //System.out.println("El Enemigo es atacado por el protagonista!");
-        
         if (this.escudo > 0) {
             int ataca = getEscudo() - e.getAtaque();
+            
+            if (ataca < 0) {setVida(getVida() + ataca);}
             setEscudo(ataca);
-            if (ataca < 0) setVida(getVida() - e.getAtaque() + ataca);
-    
         }
-        if(this.escudo == 0) setVida(getVida() - e.getAtaque());
+        else if(this.escudo == 0) setVida(getVida() - e.getAtaque());
+
         if (getVida() == 0) return true;
         else {
+            System.out.println("Vida enemiga: "+this.vida);
+        System.out.println("Escudo enemiga: "+this.escudo);
             return atacar(e);
         }
 
@@ -58,7 +79,7 @@ public class Enemigos {
 
     @Override
     public String toString() {
-        return "Enemigos [vida=" + vida + ", ataque=" + ataque + ", escudo=" + escudo + "]";
+        return nombre+" [vida=" + vida + ", ataque=" + ataque + ", escudo=" + escudo + "]";
     }
 
     

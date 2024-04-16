@@ -39,6 +39,7 @@ public class Jugador {
     public boolean atacar(Enemigos e) throws InterruptedException {
         Thread.sleep(500);
          System.out.println("Infringistes "+this.ataque+" de daño!");
+         
         
         return e.esAtacado(this);
         
@@ -50,14 +51,16 @@ public class Jugador {
         
         if (this.escudo > 0) {
             int ataca = getEscudo() - e.getAtaque();
-            setEscudo(ataca);
-            if (ataca < 0) setVida(getVida() - e.getAtaque() + ataca);
-    
+            
+            if (ataca < 0) setVida(getVida() + ataca);
+             setEscudo(ataca);
         }
-        if(this.escudo == 0) setVida(getVida() - e.getAtaque());
+       else if(this.escudo == 0) setVida(getVida() - e.getAtaque());
 
         if (getVida() == 0) return true;
         else {
+            System.out.println("Tu vida: "+this.vida);
+         System.out.println("Tu escudo: "+this.escudo);
             return atacar(e);
         }
     }
