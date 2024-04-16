@@ -3,22 +3,21 @@ package Labrinto;
 public class Enemigos {
 
     private String nombre;
-    private int vida; 
+    private int vida;
     private int ataque;
     private int escudo;
 
     private int[] estadisticaEnemigo;
 
- 
-    Enemigos(){
+    Enemigos() {
         this.estadisticaEnemigo = new int[3];
-        
+
     }
-    
 
     public int[] getEstadisticaEnemigo() {
         return estadisticaEnemigo;
     }
+
     public void setEstadisticaEnemigo(int[] estadisticaEnemigo) {
         this.estadisticaEnemigo = estadisticaEnemigo;
         this.vida = estadisticaEnemigo[0];
@@ -26,52 +25,68 @@ public class Enemigos {
         this.escudo = estadisticaEnemigo[2];
 
     }
+
     public Enemigos(String nombre) {
         this.nombre = nombre;
     }
+
     public int getVida() {
         return vida;
     }
+
     public void setVida(int vida) {
-        if (vida < 0 ) this.vida=0;
-        else this.vida = vida;
+        if (vida < 0)
+            this.vida = 0;
+        else
+            this.vida = vida;
     }
+
     public int getAtaque() {
         return ataque;
     }
+
     public void setAtaque(int ataque) {
         this.ataque = ataque;
     }
+
     public int getEscudo() {
         return escudo;
     }
+
     public void setEscudo(int escudo) {
-        if (escudo < 0) this.escudo = 0;
-        else this.escudo = escudo;
+        if (escudo < 0)
+            this.escudo = 0;
+        else
+            this.escudo = escudo;
     }
 
     public boolean atacar(Jugador e) throws InterruptedException {
         Thread.sleep(500);
-        System.out.println("El enemigo te infringió "+this.ataque+" de daño!");
         
+        System.out.println("---------------------------------------");
+        System.out.println("El enemigo te infringió " + this.ataque + " de daño!");
+
         return e.esAtacado(this);
     }
 
     public boolean esAtacado(Jugador e) throws InterruptedException {
         Thread.sleep(500);
-        //System.out.println("El Enemigo es atacado por el protagonista!");
+        // System.out.println("El Enemigo es atacado por el protagonista!");
         if (this.escudo > 0) {
             int ataca = getEscudo() - e.getAtaque();
-            
-            if (ataca < 0) {setVida(getVida() + ataca);}
-            setEscudo(ataca);
-        }
-        else if(this.escudo == 0) setVida(getVida() - e.getAtaque());
 
-        if (getVida() == 0) return true;
+            if (ataca < 0) {
+                setVida(getVida() + ataca);
+            }
+            setEscudo(ataca);
+        } else if (this.escudo == 0)
+            setVida(getVida() - e.getAtaque());
+
+        if (getVida() == 0)
+            return true;
         else {
-            System.out.println("Vida enemiga: "+this.vida);
-        System.out.println("Escudo enemiga: "+this.escudo);
+            System.out.println("Vida enemiga: " + this.vida);
+            System.out.println("Escudo enemigo: " + this.escudo);
             return atacar(e);
         }
 
@@ -79,9 +94,7 @@ public class Enemigos {
 
     @Override
     public String toString() {
-        return nombre+" [vida=" + vida + ", ataque=" + ataque + ", escudo=" + escudo + "]";
+        return nombre + " [vida=" + vida + ", ataque=" + ataque + ", escudo=" + escudo + "]";
     }
 
-    
-    
 }
