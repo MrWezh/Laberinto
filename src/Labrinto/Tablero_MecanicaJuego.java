@@ -208,7 +208,7 @@ public class Tablero_MecanicaJuego extends Tablero{
             int vidaDespues = this.getJugador().getVida() + this.jugador.getEscudo();
             this.soldado = soldadoViejo;
             System.out.println("----------------------------------------");
-            System.out.println("Recibistes un total de "+(vidaActual-vidaDespues)+" de daño!"+vidaActual+" "+vidaDespues);
+            System.out.println("Recibistes un total de "+(vidaActual-vidaDespues)+" de daño!");
            
             Thread.sleep(2000);
 

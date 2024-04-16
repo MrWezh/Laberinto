@@ -137,12 +137,22 @@ public class Interacciones {
         this.clearScreen();
        this.indroducirNombrePJ();
        int vida = this.indroducirVidaAtaqueEscudoPJ("vida");
+       if (vida == 0) {
+        System.out.println("vida máxima: "+this.puntosDeasignacion);
+        System.out.println("vida mínima: 1");
+        System.out.println("-------------------------------------");
+        vida = this.indroducirVidaAtaqueEscudoPJ("vida");
+       }
+       else this.puntosDeasignacion -= vida;
+       
        int ataque = 0;
-       if(puntosDeasignacion != 0)ataque = this.indroducirVidaAtaqueEscudoPJ("ataque");
+       if(puntosDeasignacion != 0){ataque = this.indroducirVidaAtaqueEscudoPJ("ataque");
+       this.puntosDeasignacion -= ataque;}
        int escudo = 0;
        if(puntosDeasignacion != 0){
        escudo = this.indroducirVidaAtaqueEscudoPJ("escudo");
-       }
+        this.puntosDeasignacion -= escudo;
+    }
 
       
        while (true){
@@ -190,56 +200,41 @@ public class Interacciones {
     
 
     public int indroducirVidaAtaqueEscudoPJ(String nombre){
+       
         int puntos = this.puntosDeasignacion;
         System.out.println("PUNTOS DE ASIGNACIÓN: "+puntos);
         System.out.println("-------------------------------------");
         
             int asignarPuntos = 0;
-            
+
 
             switch (nombre) {
                 case "vida":
                 System.out.println("Indroduzca la "+nombre+" que tendrá tu PJ:");
                 asignarPuntos = wz.nextInt();
-                if (asignarPuntos > this.puntosDeasignacion||asignarPuntos<=0) {
-                    System.out.println("----------OPCIÓN INCORRECTO------------");
-                    System.out.println(nombre+" máxima: "+ (this.puntosDeasignacion));
-                    System.out.println(nombre+" mínima: "+ 1);
-                    indroducirVidaAtaqueEscudoPJ("vida");
-                    }else{
-                        this.puntosDeasignacion -= asignarPuntos;
-                        
-              }
+                
                     break;
 
                 case "ataque":
                 System.out.println("Indroduzca el "+nombre+" que tendrá tu PJ:");
                 asignarPuntos = wz.nextInt();
-                if (asignarPuntos > this.puntosDeasignacion||asignarPuntos<0) {
-                    System.out.println("----------OPCIÓN INCORRECTO------------");
-                    System.out.println(nombre+" máxima: "+ (this.puntosDeasignacion));
-                    indroducirVidaAtaqueEscudoPJ("ataque");
-                    }else{
-                        this.puntosDeasignacion -= asignarPuntos;
-                       
-              }
+              
                     break; 
 
                 case "escudo":
                 System.out.println("Indroduzca el "+nombre+" que tendrá tu PJ:");
                 asignarPuntos = wz.nextInt();
-                if (asignarPuntos > this.puntosDeasignacion||asignarPuntos<0) {
-                    System.out.println("----------OPCIÓN INCORRECTO------------");
-                    System.out.println("---------MOVIMIENTO INCORRECTO---------");
-                    System.out.println(nombre+" máxima: "+ (this.puntosDeasignacion));
-                    indroducirVidaAtaqueEscudoPJ("escudo");
-                    }else{
-                        this.puntosDeasignacion -= asignarPuntos;
-                        
-              } 
+                
                     break;
             }
-            return asignarPuntos;
+
+            if (asignarPuntos > this.puntosDeasignacion||asignarPuntos<0) {
+                System.out.println("----------OPCIÓN INCORRECTO------------");
+                System.out.println(nombre+" máxima: "+ (this.puntosDeasignacion));
+                    if(nombre.equals("vida"))System.out.println("vida mínima: 1");
+                return indroducirVidaAtaqueEscudoPJ(nombre);
+                }
+            else return asignarPuntos;
             
     }
 
