@@ -316,7 +316,7 @@ public class Interacciones {
         int[] coordenadaMover = this.tablero.movimientoPJ();
         int[] casillaActual = this.tablero.getCoordenadaPJ();
 
-        boolean perder = this.tablero.interacionPJ(coordenadaMover);
+        boolean perder = this.tablero.interaccionPJ(coordenadaMover);
         if (perder)
             perderPartida();
         boolean ganar = this.tablero.moverse(casillaActual, coordenadaMover);

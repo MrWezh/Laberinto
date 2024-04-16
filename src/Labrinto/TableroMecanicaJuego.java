@@ -225,7 +225,7 @@ public class TableroMecanicaJuego extends Tablero {
      * Metodo para cuando el PJ tenga interacciones en la mapa(tocar una pared, un
      * enemigo o una recompensa).
      */
-    public boolean interacionPJ(int[] coordenadaMover) throws InterruptedException {
+    public boolean interaccionPJ(int[] coordenadaMover) throws InterruptedException {
 
         if (this.getLaberinto()[coordenadaMover[0]][coordenadaMover[1]] == Square.SOLDADO) {
             this.clearScreen();

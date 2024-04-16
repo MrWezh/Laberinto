@@ -118,12 +118,8 @@ public class Tablero {
         }
 
         // this.size * 2 para limitar la generación de camino, ya que hay situaciones
-        // que el generador de camino se que estancado y entra en un bucle infinito.
-        // posible situación: se queda en el medio de la matriz/mapa/laberinto y no
-        // `puede "moverse más para generar caminos", ya que estaria rodeado de paredes
-        // que
-        // no pueden ser camino (el codigo reeplaza las paredes que pueden ser caminos
-        // los cuales no compactan con otros).
+        // que el generador de camino se queda estancado y entra en un bucle infinito.
+        
         if (this.coordenadaICamino != this.size - 1 && this.coordenadaJCamino >= 0
                 && this.limiteGeneralCaminos != this.size * 2) {
             // System.out.println("-------------------------------------------");
@@ -158,17 +154,7 @@ public class Tablero {
 
     /*
      * para evitar que los caminos se compactan, antes de poner pintar el camino,
-     * miramos si a su alrededor hay más de 3 caminos o no:
-     * 
-     * ··s
-     * s·x si ponemos un camino en está posición, se compactará con los otros.
-     * ··
-     * ·
-     * 
-     * Si nos fijamos alrededor de la x del ejemplo, podemos ver que hay 3 camino.
-     * No obstante, los alrededores de las s,
-     * que replesentan casillas que pueden ser caminos, solo tienen menos de 3
-     * caminos.
+     * miramos si a su alrededor hay más de 3 caminos o no.
      * 
      */
 

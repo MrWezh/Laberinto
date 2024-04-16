@@ -8,6 +8,13 @@ public class Jugador {
     private int vida;
     private int ataque;
     private int escudo;
+    private Random random; 
+
+    
+
+    public Jugador() {
+        this.random  = new Random();
+    }
 
     public int getEscudo() {
         return escudo;
@@ -83,9 +90,9 @@ public class Jugador {
 
     public void sumarEstadistica() throws InterruptedException {
 
-        Random random = new Random();
 
-        int opcion = random.nextInt(3) + 1;
+        int opcion = this.random.nextInt(3) + 1;
+        
 
         switch (opcion) {
 
