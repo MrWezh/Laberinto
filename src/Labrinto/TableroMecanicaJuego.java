@@ -241,6 +241,7 @@ public class TableroMecanicaJuego extends Tablero {
            else {System.out.println("Terrotastes el enemigo!");} 
            System.out.println("──────────────────────────────────────────────────");
             System.out.println("Recibistes un total de " + (vidaActual - vidaDespues) + " de daño!");
+            System.out.println();
             wz.nextLine();
             System.out.print("Teclea cualquier letra para continuar: ");String a = wz.nextLine();
 

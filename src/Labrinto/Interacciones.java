@@ -47,14 +47,12 @@ public class Interacciones {
     public void menuInical() throws InterruptedException {
         this.clearScreen();
         
-        System.out.println("╔═════════════════════╗");
-		System.out.println("║1.COMENZAR JUEGO     ║");
-		System.out.println("║─────────────────────║");
-		System.out.println("║2.¿COMO SE JUEGA?    ║");
-		System.out.println("║─────────────────────║");
-		System.out.println("║0.SALIR DEL JUEGO    ║");
-		System.out.println("╚═════════════════════╝");
-		System.out.println("-----------------------");
+        System.out.println("╔═════════════════════════════════════╗");
+		System.out.println("║1.COMENZAR JUEGO                     ║");
+		System.out.println("║2.¿COMO SE JUEGA?                    ║");
+		System.out.println("║0.SALIR DEL JUEGO                    ║");
+        System.out.println("╚═════════════════════════════════════╝");
+		System.out.println("---------------------------------------");
 		System.out.println();
 		System.out.print("INDRODUZCA TU OPCIÓN: ");
         String opcion = wz.next();
@@ -241,8 +239,9 @@ public class Interacciones {
 
     public void indroducirNombrePJ() {
         wz.nextLine();
+        System.out.println("-------------------------------------");
 
-        System.out.println("Indroduzca el nombre que tendrá tu PJ:");
+        System.out.println("*Indroduzca el nombre que tendrá tu PJ:");
         String nombre = wz.nextLine();
 
         System.out.println("-------------------------------------");
@@ -271,12 +270,12 @@ public class Interacciones {
         System.out.println("╔═════════════════════════════════════╗");
         System.out.println("║ PUNTOS DE ASIGNACIÓN: " + puntos+"             ║");
         System.out.println("╚═════════════════════════════════════╝");
-        System.out.println("-------------------------------------");
+        System.out.println("---------------------------------------");
         }else{
             System.out.println("╔═════════════════════════════════════╗");
             System.out.println("║ PUNTOS DE ASIGNACIÓN: " + puntos+"            ║");
             System.out.println("╚═════════════════════════════════════╝");
-            System.out.println("-------------------------------------");
+            System.out.println("---------------------------------------");
 
         }
         int asignarPuntos = 0;
