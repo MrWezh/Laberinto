@@ -1,6 +1,7 @@
 package Labrinto;
 
 import java.util.Random;
+import java.util.Scanner;
 
 public class Jugador {
 
@@ -9,11 +10,14 @@ public class Jugador {
     private int ataque;
     private int escudo;
     private Random random; 
+    private Scanner wz; 
 
+    private boolean defender; 
     
 
     public Jugador() {
         this.random  = new Random();
+        this.wz = new Scanner(System.in);
     }
 
     public int getEscudo() {
@@ -54,7 +58,7 @@ public class Jugador {
         this.ataque = ataque;
     }
 
-    public boolean atacar(Enemigos e) throws InterruptedException {
+    /*public boolean atacar(Enemigos e) throws InterruptedException {
         
         
        
@@ -86,6 +90,43 @@ public class Jugador {
             System.out.println("Tu escudo: " + this.escudo);
             return atacar(e);
         }
+    }*/
+
+    public int atacar(Enemigos e){
+
+        System.out.println("1.Atacar | 2.Defender | 3.Disparar");
+        int opcion = wz.nextInt(); 
+
+        return opcion;
+        
+    }
+
+    public void esAtacado(Enemigos e, boolean usarEscudo){
+
+        if (usarEscudo){
+            
+            if (escudo > 0){
+            int dañoRecibido = this.escudo - e.getAtaque();
+
+            System.out.println("Recibistes "+dañoRecibido);
+            this.setEscudo(dañoRecibido);
+            
+             if (getEscudo() == 0){System.out.println("Tu escudo te bloqueo una ultima ataque...");}
+            
+        }
+
+        else if (getEscudo() == 0){
+            System.out.println("Recibistes "+e.getAtaque()/2);
+            setVida(this.vida - (e.getAtaque()/2));
+        }
+
+        }
+        else{
+            System.out.println("Recibistes "+e.getAtaque());
+            setVida(this.vida - e.getAtaque());
+        }
+        
+
     }
 
     public void sumarEstadistica() throws InterruptedException {

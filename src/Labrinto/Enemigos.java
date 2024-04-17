@@ -1,16 +1,20 @@
 package Labrinto;
 
+import java.util.Random;
+
 public class Enemigos {
 
     private String nombre;
     private int vida;
     private int ataque;
     private int escudo;
+    private Random random;
 
     private int[] estadisticaEnemigo;
 
     Enemigos() {
         this.estadisticaEnemigo = new int[3];
+        this.random = new Random();
 
     }
 
@@ -60,7 +64,7 @@ public class Enemigos {
             this.escudo = escudo;
     }
 
-    public boolean atacar(Jugador e) throws InterruptedException {
+    /*public boolean atacar(Jugador e) throws InterruptedException {
         Thread.sleep(500);
         
         System.out.println("---------------------------------------");
@@ -89,6 +93,16 @@ public class Enemigos {
             System.out.println("Escudo enemigo: " + this.escudo);
             return atacar(e);
         }
+
+    }*/
+
+    public int atacar(Jugador j){
+        return (this.random.nextInt(3))+1;
+    }
+
+    public void esAtacado(Jugador j){
+
+      
 
     }
 

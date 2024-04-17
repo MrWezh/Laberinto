@@ -409,4 +409,109 @@ public class TableroMecanicaJuego extends Tablero {
         System.out.flush();
     }
 
+
+    public void combate(String opcion){
+        this.clearScreen();
+        System.out.println(this.jugador.toString());
+
+        int eleccionJugador = 0; 
+        int eleccionEnemigo = 0; 
+        Enemigos e = this.asesino; 
+        
+        switch (opcion) {
+            case "asesino":
+            eleccionJugador = this.jugador.atacar(this.asesino);
+            eleccionEnemigo = this.asesino.atacar(this.jugador);
+            
+                break;
+
+            case "soldado":
+                eleccionJugador = this.jugador.atacar(this.soldado); 
+                eleccionEnemigo = this.soldado.atacar(this.jugador);
+                e = this.soldado;
+                break; 
+        
+            default:
+                break;
+        }
+        
+        this.imprimirEleccionCombate(eleccionJugador);
+        this.imprimirEleccionCombate(eleccionEnemigo);
+        
+        if (eleccionJugador == eleccionEnemigo){
+            switch (eleccionEnemigo) {
+                case 1:
+                    System.out.println("");
+                    break;
+                
+                case 2: 
+                    break;
+
+                case 3: 
+
+                    break;
+                default:
+                    break;
+            }        }
+        else{
+            this.situacionesCombate(eleccionJugador, eleccionEnemigo,e);
+        }
+
+        
+    }
+
+    public void situacionesCombate(int jugador, int enemigo, Enemigos tipo){
+        //1: artacar; 2: defender; 3: disparar
+
+        switch (jugador) {
+            case 1:
+                if (enemigo == 3){
+                    tipo.esAtacado(this.jugador);
+                }
+                break;
+            
+            case 2: 
+                if (enemigo == 1) {
+                    this.jugador.esAtacado(tipo, true);
+                }
+                break; 
+            case 3: 
+                if (enemigo == 2) {
+                    tipo.esAtacado(this.jugador);
+
+                }
+                break; 
+            default:
+                break;
+        }
+        
+
+    }
+
+    public void imprimirEleccionCombate(int opcion){
+
+        switch (opcion) {
+            case 1:
+            System.out.println("  ___ ");
+            System.out.println(" | _ |");
+            System.out.println(" | @ |");
+            System.out.println(" \\_-_/");
+            System.out.println();
+                break;
+
+            case 2: 
+            System.out.println();
+            System.out.println("══|>>>>>>>");
+            System.out.println();
+                break; 
+            
+            case 3: 
+            System.out.println();
+            System.out.println(">>═════>");
+            System.out.println();
+            default:
+                break;
+        }
+    }
+
 }
