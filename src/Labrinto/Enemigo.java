@@ -2,7 +2,7 @@ package Labrinto;
 
 import java.util.Random;
 
-public class Enemigos {
+public class Enemigo {
 
     private String nombre;
     private int vida;
@@ -12,7 +12,7 @@ public class Enemigos {
 
     private int[] estadisticaEnemigo;
 
-    Enemigos() {
+    Enemigo() {
         this.estadisticaEnemigo = new int[3];
         this.random = new Random();
 
@@ -30,7 +30,7 @@ public class Enemigos {
 
     }
 
-    public Enemigos(String nombre) {
+    public Enemigo(String nombre) {
         this.nombre = nombre;
     }
 
@@ -64,45 +64,41 @@ public class Enemigos {
             this.escudo = escudo;
     }
 
-    /*public boolean atacar(Jugador e) throws InterruptedException {
-        Thread.sleep(500);
-        
-        System.out.println("---------------------------------------");
-        System.out.println("El enemigo te infringió " + this.ataque + " de daño!");
+    
 
-        return e.esAtacado(this);
+    public String atacar(){
+        
+        int a = this.random.nextInt(3)+1;
+        
+        String eleccionEnemiga = ""+a; 
+        
+        return eleccionEnemiga;
     }
 
-    public boolean esAtacado(Jugador e) throws InterruptedException {
-        Thread.sleep(500);
-        // System.out.println("El Enemigo es atacado por el protagonista!");
-        if (this.escudo > 0) {
-            int ataca = getEscudo() - e.getAtaque();
+    public void esAtacado(Jugador e, boolean usarEscudo, boolean esFlecha){
 
-            if (ataca < 0) {
-                setVida(getVida() + ataca);
-            }
-            setEscudo(ataca);
-        } else if (this.escudo == 0)
-            setVida(getVida() - e.getAtaque());
+        if (usarEscudo&&!esFlecha){
+            
+            if (escudo > 0){
+            int dañoRecibido = this.escudo -1;
 
-        if (getVida() == 0)
-            return true;
-        else {
-            System.out.println("Vida enemiga: " + this.vida);
-            System.out.println("Escudo enemigo: " + this.escudo);
-            return atacar(e);
+            System.out.println("Su escudo recibio "+1+" de daño!");
+            this.setEscudo(dañoRecibido);
+            
+             if (getEscudo() == 0){System.out.println("Su escudo le bloqueo una ultima ataque...");}
+            
         }
 
-    }*/
+        else if (getEscudo() == 0){
+            System.out.println("Le infringistes "+e.getAtaque()/2+" de daño! Aunque lo intentó esquivar...");
+            setVida(this.vida - (e.getAtaque()/2));
+        }
 
-    public int atacar(Jugador j){
-        return (this.random.nextInt(3))+1;
-    }
-
-    public void esAtacado(Jugador j){
-
-      
+        }
+        else{
+            System.out.println("Le infringistes "+e.getAtaque()+" de daño!");
+            setVida(this.vida - e.getAtaque());
+        }
 
     }
 

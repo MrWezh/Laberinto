@@ -6,8 +6,8 @@ import java.util.Scanner;
 public class TableroMecanicaJuego extends Tablero {
 
     private Jugador jugador;
-    Enemigos soldado;
-    Enemigos asesino; 
+    Enemigo soldado;
+    Enemigo asesino;
     private int numeroRecompensa;
     private int numeroEnemigos;
     private int numeroSalida;
@@ -21,8 +21,8 @@ public class TableroMecanicaJuego extends Tablero {
 
     public TableroMecanicaJuego() {
         this.jugador = new Jugador();
-        this.soldado = new Enemigos("Soldado esqueleto");
-        this.asesino = new Enemigos("Asesino");
+        this.soldado = new Enemigo("Soldado esqueleto");
+        this.asesino = new Enemigo("Asesino");
 
         this.estacEnemigoAsesino = new int[3];
         this.estacEnemigoSoldado = new int[3];
@@ -77,19 +77,19 @@ public class TableroMecanicaJuego extends Tablero {
         this.jugador = jugador;
     }
 
-    public Enemigos getSoldado() {
+    public Enemigo getSoldado() {
         return soldado;
     }
 
-    public void setSoldado(Enemigos soldado1) {
+    public void setSoldado(Enemigo soldado1) {
         this.soldado = soldado1;
     }
 
-    public Enemigos getAsesino() {
+    public Enemigo getAsesino() {
         return asesino;
     }
 
-    public void setAsesino(Enemigos soldado2) {
+    public void setAsesino(Enemigo soldado2) {
         this.asesino = soldado2;
     }
 
@@ -152,14 +152,15 @@ public class TableroMecanicaJuego extends Tablero {
             int columnas = caminoRandom[1];
             boolean randomCamino = false;
 
-           /* si dividimos el tablero en 4 zonas, cuando selecionarzona es 1 está
-            *seleccionando la zona de abajo derecha; si es 2 abajo izquierda; 3 arriba
-            *derecha
-            *
-            * arriba izquierda| arriba derecha
-            * -------------------------------
-            * abajo izqueirda| abajo derecha
-            */
+            /*
+             * si dividimos el tablero en 4 zonas, cuando selecionarzona es 1 está
+             * seleccionando la zona de abajo derecha; si es 2 abajo izquierda; 3 arriba
+             * derecha
+             *
+             * arriba izquierda| arriba derecha
+             * -------------------------------
+             * abajo izqueirda| abajo derecha
+             */
             if (seleccionarZona == 1)
                 randomCamino = filas >= rango && columnas >= rango;
             if (seleccionarZona == 2)
@@ -233,45 +234,64 @@ public class TableroMecanicaJuego extends Tablero {
             System.out.println(this.jugador.toString());
             int[] estacEnemigo = this.estacEnemigoSoldado;
             int vidaActual = this.getJugador().getVida() + this.jugador.getEscudo();
-            this.getJugador().atacar(this.getSoldado());
-            int vidaDespues = this.getJugador().getVida() + this.jugador.getEscudo();
-            this.soldado.setEstadisticaEnemigo(estacEnemigo);
+            int vidaDespues = 0;
+            while (true) {
+                this.combate("soldado");
 
-           if (vidaActual-vidaDespues <= 0){System.out.println("Te han matado...");}
-           else {System.out.println("Terrotastes el enemigo!");} 
-           System.out.println("──────────────────────────────────────────────────");
-            System.out.println("Recibistes un total de " + (vidaActual - vidaDespues) + " de daño!");
-            System.out.println();
+                vidaDespues = this.getJugador().getVida() + this.jugador.getEscudo();
+
+                if (vidaActual - vidaDespues <= 0) {
+                    System.out.println("Te han matado...");
+                    break;
+                } else {
+                    System.out.println("Terrotastes el enemigo!");
+
+                    break;
+                }
+
+            }
+            this.setEstacEnemigoSoldado(estacEnemigo);
+
             wz.nextLine();
-            System.out.print("Teclea cualquier letra para continuar: ");String a = wz.nextLine();
+            System.out.print("Teclea cualquier letra para continuar: ");
+            String a = wz.nextLine();
 
-            //Thread.sleep(2000);
+            // Thread.sleep(2000);
 
         } else if (this.getLaberinto()[coordenadaMover[0]][coordenadaMover[1]] == Square.ASESINO) {
             this.clearScreen();
-            System.out.println(this.asesino.toString());
-            System.out.println(this.jugador.toString());
             int[] estacEnemigo = this.estacEnemigoAsesino;
-                    /*
-                    * Guardar la vida antes de entrar en el combate y después del combate, para
-                    * poder saber cuando daño a recibido el jugador.
-                    */
+            /*
+             * Guardar la vida antes de entrar en el combate y después del combate, para
+             * poder saber cuando daño a recibido el jugador.
+             */
             int vidaActual = this.getJugador().getVida() + this.jugador.getEscudo();
-            this.getAsesino().atacar(this.getJugador());
-            int vidaDespues = this.getJugador().getVida() + this.jugador.getEscudo();
-                    /*
-                    * como solo he creado un solo objeto para cada tipo de enemigos, para poder
-                    * reutilizar los enemigos,he guardados las estadísticas
-                    * de estos. Cada vez que termine un combate, indroducimos las estadísticas
-                    * guardadas a los enemigos que han entrado en combate.
-                    */
+            int vidaDespues = 0;
+
+            while (true) {
+                this.combate("asesino");
+                vidaDespues = this.getJugador().getVida() + this.jugador.getEscudo();
+                if (vidaActual - vidaDespues <= 0) {
+                    System.out.println("Te han matado...");
+                    break;
+                } else {
+                    System.out.println("Terrotastes el enemigo!");
+                    break;
+                }
+            }
+
+            /*
+             * como solo he creado un solo objeto para cada tipo de enemigos, para poder
+             * reutilizar los enemigos,he guardados las estadísticas
+             * de estos. Cada vez que termine un combate, indroducimos las estadísticas
+             * guardadas a los enemigos que han entrado en combate.
+             */
             this.asesino.setEstadisticaEnemigo(estacEnemigo);
 
-            System.out.println("----------------------------------------");
-            System.out.println("Recibistes un total de " + (vidaActual - vidaDespues) + " de dañó!");
             wz.nextLine();
-            System.out.print("Teclea cualquier letra para continuar: "); String a = wz.nextLine();
-           // Thread.sleep(2000);
+            System.out.print("Teclea cualquier letra para continuar: ");
+            String a = wz.nextLine();
+            // Thread.sleep(2000);
 
         }
 
@@ -285,7 +305,7 @@ public class TableroMecanicaJuego extends Tablero {
             }
             this.clearScreen();
             this.getJugador().sumarEstadistica();
-            this.escudoInicialPJ = this.jugador.getEscudo(); 
+            this.escudoInicialPJ = this.jugador.getEscudo();
 
         }
 
@@ -409,106 +429,120 @@ public class TableroMecanicaJuego extends Tablero {
         System.out.flush();
     }
 
-
-    public void combate(String opcion){
-        this.clearScreen();
+    public void combate(String opcion) {
+        // this.clearScreen();
         System.out.println(this.jugador.toString());
 
-        int eleccionJugador = 0; 
-        int eleccionEnemigo = 0; 
-        Enemigos e = this.asesino; 
-        
+        String eleccionJugador = "";
+        String eleccionEnemigo = "";
+        Enemigo e = this.asesino;
+
         switch (opcion) {
             case "asesino":
-            eleccionJugador = this.jugador.atacar(this.asesino);
-            eleccionEnemigo = this.asesino.atacar(this.jugador);
-            
+                eleccionJugador = this.jugador.atacar();
+                eleccionEnemigo = this.asesino.atacar();
+
                 break;
 
             case "soldado":
-                eleccionJugador = this.jugador.atacar(this.soldado); 
-                eleccionEnemigo = this.soldado.atacar(this.jugador);
+                eleccionJugador = this.jugador.atacar();
+                eleccionEnemigo = this.soldado.atacar();
                 e = this.soldado;
-                break; 
-        
+
+                break;
+
             default:
                 break;
         }
-        
+
         this.imprimirEleccionCombate(eleccionJugador);
         this.imprimirEleccionCombate(eleccionEnemigo);
-        
-        if (eleccionJugador == eleccionEnemigo){
+
+        if (eleccionJugador.equals(eleccionEnemigo)) {
             switch (eleccionEnemigo) {
-                case 1:
-                    System.out.println("");
-                    break;
-                
-                case 2: 
+                case "1":
+                    System.out.println("Se escucha un brillo sonido causado por el choque vuestras espadas...");
                     break;
 
-                case 3: 
+                case "2":
+                    System.out.println("Intercambias las miradas mientras alzais vuestros escudos...");
+                    break;
 
+                case "3":
+                    System.out.println("Ambos habeis esquivado la flecha del otro...");
                     break;
                 default:
                     break;
-            }        }
-        else{
-            this.situacionesCombate(eleccionJugador, eleccionEnemigo,e);
+            }
+        } else {
+            this.situacionesCombate(eleccionJugador, eleccionEnemigo, e);
         }
 
-        
     }
 
-    public void situacionesCombate(int jugador, int enemigo, Enemigos tipo){
-        //1: artacar; 2: defender; 3: disparar
+    public void situacionesCombate(String eleccionJugador, String eleccioEnemiga, Enemigo tipo) {
+        // 1: artacar; 2: defender; 3: disparar
 
-        switch (jugador) {
-            case 1:
-                if (enemigo == 3){
-                    tipo.esAtacado(this.jugador);
+        switch (eleccionJugador) {
+            case "1":
+                if (eleccioEnemiga.equals("3")) {
+                    System.out.println("Esquivaste su flecha!");
+                    tipo.esAtacado(this.jugador, false, true);
+                } else if (eleccioEnemiga.equals("2")) {
+                    System.out.println("Ha bloqueado tu ataque...");
+                    tipo.esAtacado(this.jugador, true, false);
                 }
                 break;
-            
-            case 2: 
-                if (enemigo == 1) {
-                    this.jugador.esAtacado(tipo, true);
+
+            case "2":
+                if (eleccioEnemiga.equals("1")) {
+                    System.out.println("Bloqueaste su ataque de espada!");
+                    this.jugador.esAtacado(tipo, true, false);
+                } else if (eleccioEnemiga.equals("3")) {
+                    System.out.println("No pudistes bloquear sus flechas...");
+                    this.jugador.esAtacado(tipo, false, true);
                 }
-                break; 
-            case 3: 
-                if (enemigo == 2) {
-                    tipo.esAtacado(this.jugador);
+                break;
+            case "3":
+                if (eleccioEnemiga.equals("1")) {
+                    System.out.println("Esquivó tus flechas...");
+                    this.jugador.esAtacado(tipo, false, true);
+                } else if (eleccioEnemiga.equals("2")) {
+                    System.out.println("NO pudo bloquear tus flechas!");
+                    tipo.esAtacado(this.jugador, true, true);
 
                 }
-                break; 
+                break;
             default:
                 break;
         }
-        
 
     }
 
-    public void imprimirEleccionCombate(int opcion){
+    public void imprimirEleccionCombate(String opcion) {
 
         switch (opcion) {
-            case 1:
-            System.out.println("  ___ ");
-            System.out.println(" | _ |");
-            System.out.println(" | @ |");
-            System.out.println(" \\_-_/");
-            System.out.println();
+            case "1":
+                System.out.println();
+                System.out.println("══|>>>>>>>");
+                System.out.println();
+
                 break;
 
-            case 2: 
-            System.out.println();
-            System.out.println("══|>>>>>>>");
-            System.out.println();
-                break; 
-            
-            case 3: 
-            System.out.println();
-            System.out.println(">>═════>");
-            System.out.println();
+            case "2":
+
+                System.out.println("  ___ ");
+                System.out.println(" | _ |");
+                System.out.println(" | @ |");
+                System.out.println(" \\_-_/");
+                System.out.println();
+
+                break;
+
+            case "3":
+                System.out.println();
+                System.out.println(">>----->");
+                System.out.println();
             default:
                 break;
         }
