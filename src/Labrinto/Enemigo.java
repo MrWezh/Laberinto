@@ -12,7 +12,7 @@ public class Enemigo {
 
     private int[] estadisticaEnemigo;
 
-    Enemigo() {
+    public Enemigo() {
         this.estadisticaEnemigo = new int[3];
         this.random = new Random();
 
@@ -67,10 +67,12 @@ public class Enemigo {
     
 
     public String atacar(){
+
+        Random random = new Random();
         
-        int a = this.random.nextInt(3)+1;
+        int elecion = random.nextInt(3) +1;
         
-        String eleccionEnemiga = ""+a; 
+        String eleccionEnemiga = ""+elecion; 
         
         return eleccionEnemiga;
     }

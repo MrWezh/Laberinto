@@ -229,55 +229,53 @@ public class TableroMecanicaJuego extends Tablero {
     public boolean interaccionPJ(int[] coordenadaMover) throws InterruptedException {
 
         if (this.getLaberinto()[coordenadaMover[0]][coordenadaMover[1]] == Square.SOLDADO) {
-            this.clearScreen();
-            System.out.println(this.soldado.toString());
-            System.out.println(this.jugador.toString());
+
             int[] estacEnemigo = this.estacEnemigoSoldado;
-            int vidaActual = this.getJugador().getVida() + this.jugador.getEscudo();
-            int vidaDespues = 0;
+
             while (true) {
+            clearScreen();
+            System.out.println(this.soldado.toString());
                 this.combate("soldado");
 
-                vidaDespues = this.getJugador().getVida() + this.jugador.getEscudo();
-
-                if (vidaActual - vidaDespues <= 0) {
+                if (this.jugador.getVida() == 0){
                     System.out.println("Te han matado...");
-                    break;
-                } else {
-                    System.out.println("Terrotastes el enemigo!");
-
+                    Thread.sleep(1000);
+                    break;}
+                else if (this.soldado.getVida() == 0){
+                    System.out.println("Has matado a tu enemigo!");
+                    Thread.sleep(1000);
                     break;
                 }
-
+                System.out.print("Teclea cualquer letra para seguir: ");String a = wz.nextLine();
             }
-            this.setEstacEnemigoSoldado(estacEnemigo);
+            this.soldado.setEstadisticaEnemigo(estacEnemigo);
 
-            wz.nextLine();
+            
             System.out.print("Teclea cualquier letra para continuar: ");
             String a = wz.nextLine();
 
             // Thread.sleep(2000);
 
         } else if (this.getLaberinto()[coordenadaMover[0]][coordenadaMover[1]] == Square.ASESINO) {
-            this.clearScreen();
             int[] estacEnemigo = this.estacEnemigoAsesino;
-            /*
-             * Guardar la vida antes de entrar en el combate y después del combate, para
-             * poder saber cuando daño a recibido el jugador.
-             */
-            int vidaActual = this.getJugador().getVida() + this.jugador.getEscudo();
-            int vidaDespues = 0;
-
+           
             while (true) {
+                clearScreen();
+            System.out.println(this.asesino.toString());
                 this.combate("asesino");
-                vidaDespues = this.getJugador().getVida() + this.jugador.getEscudo();
-                if (vidaActual - vidaDespues <= 0) {
+
+                if (this.jugador.getVida() == 0){
                     System.out.println("Te han matado...");
-                    break;
-                } else {
-                    System.out.println("Terrotastes el enemigo!");
+                    Thread.sleep(1000);
+                    break;}
+                else if (this.asesino.getVida() == 0){
+                    System.out.println("Has matado a tu enemigo!");
+                    Thread.sleep(1000);
                     break;
                 }
+                this.asesino.setEstadisticaEnemigo(estacEnemigo);
+                
+                System.out.print("Teclea cualquer letra para seguir: ");String a = wz.nextLine();
             }
 
             /*
@@ -290,7 +288,7 @@ public class TableroMecanicaJuego extends Tablero {
 
             wz.nextLine();
             System.out.print("Teclea cualquier letra para continuar: ");
-            String a = wz.nextLine();
+            String a = wz.next();
             // Thread.sleep(2000);
 
         }
@@ -496,7 +494,7 @@ public class TableroMecanicaJuego extends Tablero {
 
             case "2":
                 if (eleccioEnemiga.equals("1")) {
-                    System.out.println("Bloqueaste su ataque de espada!");
+                    if (this.jugador.getEscudo() != 0)System.out.println("Bloqueaste su ataque de espada!");
                     this.jugador.esAtacado(tipo, true, false);
                 } else if (eleccioEnemiga.equals("3")) {
                     System.out.println("No pudistes bloquear sus flechas...");

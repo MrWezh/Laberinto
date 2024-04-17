@@ -93,9 +93,8 @@ public class Jugador {
     }*/
 
     public String atacar(){
-
         System.out.println("1.Atacar | 2.Defender | 3.Disparar");
-        String opcion = wz.next(); 
+        String opcion = wz.nextLine(); 
 
         return opcion;
         
@@ -116,8 +115,10 @@ public class Jugador {
         }
 
         else if (getEscudo() == 0){
-            System.out.println("Recibistes "+e.getAtaque()/2+" de daño! Aunque lo intentastes esquivar...");
-            setVida(this.vida - (e.getAtaque()/2));
+            int damageRecibido = e.getAtaque()/2;
+            if(damageRecibido==0) damageRecibido = 1;
+            System.out.println("Recibistes "+damageRecibido+" de daño! Aunque lo intentastes esquivar...");
+            setVida(this.vida - damageRecibido);
         }
 
         }
