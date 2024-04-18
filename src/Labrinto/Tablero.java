@@ -85,7 +85,7 @@ public class Tablero {
         Random randomDireccion = new Random();
 
         // 1: subir, 2: girar izquierda, 3: bajar, 4: girar derecha
-        int opcion = randomDireccion.nextInt(4);
+        int opcion = randomDireccion.nextInt(4)+1;
 
         switch (opcion) {
             case 1:

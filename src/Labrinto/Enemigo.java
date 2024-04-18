@@ -64,6 +64,17 @@ public class Enemigo {
             this.escudo = escudo;
     }
 
+    public int[] guardarEstacsEnemigo(){
+
+        int[] estacsEnemigo = new int[3];
+
+        estacsEnemigo[0] = this.vida; 
+        estacsEnemigo[1] = this.ataque;
+        estacsEnemigo[2] = this.escudo;
+
+        return estacsEnemigo;
+    }
+
     
 
     public String atacar(){

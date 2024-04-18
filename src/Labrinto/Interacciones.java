@@ -8,6 +8,9 @@ public class Interacciones {
     Scanner wz;
     private int puntosDeasignacion;
 
+    private int consumirEnter = 1; 
+
+
     public Interacciones() {
         wz = new Scanner(System.in);
         tablero = new TableroMecanicaJuego();
@@ -33,11 +36,12 @@ public class Interacciones {
 
         this.tablero.descubrirCasillas(0, 0);
         while (true) {
+            
             this.clearScreen();
             this.tablero.print();
 
             // Imprimir la información del jugador, asesino y soldado
-            System.out.println(this.tablero.getCoordenadaPJ()[0] + " " + this.tablero.getCoordenadaPJ()[1]);
+            //System.out.println(this.tablero.getCoordenadaPJ()[0] + " " + this.tablero.getCoordenadaPJ()[1]);
 
             this.preguntarDireccionMovimiento();
         }
@@ -97,8 +101,7 @@ public class Interacciones {
 		System.out.print("INDRODUZCA TU OPCIÓN: ");
         String opcion = wz.next();
         this.clearScreen();
-        int[] estacAsesino = new int[3];
-        int[] estacSoldado = new int[3];
+     
         switch (opcion) {
             case "1":
                 this.tablero.setSize(10);
@@ -112,11 +115,6 @@ public class Interacciones {
                 this.tablero.getAsesino().setEscudo(3);
 
                 this.puntosDeasignacion = 10;
-                int[] a = { 10, 1, 5 };
-                int[] b = { 3, 4, 3 };
-
-                estacSoldado = a;
-                estacAsesino = b;
 
                 this.tablero.setNumeroEnemigos(6);
                 this.tablero.setNumeroRecompensa(6);
@@ -132,12 +130,6 @@ public class Interacciones {
                 this.tablero.getAsesino().setAtaque(8);
                 this.tablero.getAsesino().setEscudo(0);
                 this.tablero.getAsesino().setVida(5);
-
-                int[] c = { 10, 3, 10 };
-                int[] d = { 5, 8, 0 };
-
-                estacSoldado = c;
-                estacAsesino = d;
 
                 this.puntosDeasignacion = 10;
 
@@ -156,11 +148,6 @@ public class Interacciones {
                 this.tablero.getAsesino().setEscudo(7);
                 this.tablero.getAsesino().setVida(5);
 
-                int[] e = { 10, 3, 20 };
-                int[] f = { 5, 9, 7 };
-
-                estacSoldado = e;
-                estacAsesino = f;
 
                 this.puntosDeasignacion = 15;
 
@@ -176,8 +163,6 @@ public class Interacciones {
                 break;
         }
 
-        this.tablero.setEstacEnemigoAsesino(estacAsesino);
-        this.tablero.setEstacEnemigoSoldado(estacSoldado);
     }
 
     private void crearPersonaje() {
@@ -312,17 +297,114 @@ public class Interacciones {
     }
 
     public void preguntarDireccionMovimiento() throws InterruptedException {
-
         int[] coordenadaMover = this.tablero.movimientoPJ();
         int[] casillaActual = this.tablero.getCoordenadaPJ();
 
-        boolean perder = this.tablero.interaccionPJ(coordenadaMover);
+        boolean perder = this.interaccionPJ(coordenadaMover);
         if (perder)
             perderPartida();
         boolean ganar = this.tablero.moverse(casillaActual, coordenadaMover);
         if (ganar)
             ganarPartida();
 
+    }
+
+
+
+    public boolean interaccionPJ(int[] coordenadaMover) throws InterruptedException {
+
+        int consumirEnter = this.tablero.getNumeroEnemigos();
+
+        if (this.tablero.getLaberinto()[coordenadaMover[0]][coordenadaMover[1]] == Square.SOLDADO) {
+            if (consumirEnter != 0){ wz.nextLine();consumirEnter--;}
+            int[] estacEnemigo = this.tablero.getSoldado().guardarEstacsEnemigo();
+
+            while (true) {
+                clearScreen();
+                System.out.println(this.tablero.getSoldado().toString());
+                this.tablero.combate("soldado");
+                
+
+                if (this.tablero.getJugador().getVida() == 0) {
+                    System.out.println("Te han matado...");
+                    Thread.sleep(1000);
+                    break;
+                } else if (this.tablero.getSoldado().getVida() == 0) {
+                    System.out.println("Has matado a tu enemigo!");
+                    Thread.sleep(1000);
+                    break;
+                }
+                System.out.print("Pulsa enter para seguir: "); wz.nextLine();
+                //System.out.print("Teclea cualquer letra para seguir: ");
+                //String a = wz.nextLine();
+            }
+             
+            this.tablero.getSoldado().setEstadisticaEnemigo(estacEnemigo);
+
+            System.out.print("Pulse enter para seguir: ");
+            wz.nextLine();
+
+
+        } else if (this.tablero.getLaberinto()[coordenadaMover[0]][coordenadaMover[1]] == Square.ASESINO) {
+            if (consumirEnter != 0){ wz.nextLine();consumirEnter--;}
+            int[] estacEnemigo = this.tablero.getAsesino().guardarEstacsEnemigo();
+
+            while (true) {
+                clearScreen();
+                System.out.println(this.tablero.getAsesino().toString());
+                this.tablero.combate("asesino");
+
+                if (this.tablero.getJugador().getVida() == 0) {
+                    consumirEnter ++; 
+                    System.out.println("Te han matado...");
+                    Thread.sleep(1000);
+                    break;
+                } else if (this.tablero.getAsesino().getVida() == 0) {
+                    consumirEnter ++; 
+                    System.out.println("Has matado a tu enemigo!");
+                    Thread.sleep(1000);
+                    break;
+                }
+                System.out.print("Pulsa enter para seguir: "); wz.nextLine();
+                //System.out.print("Teclea cualquer letra para seguir: ");
+                //String a = wz.nextLine();
+            }
+            this.tablero.getAsesino().setEstadisticaEnemigo(estacEnemigo);
+
+            System.out.print("Pulsa enter para seguir: ");
+            wz.nextLine();
+
+            /*
+             * como solo he creado un solo objeto para cada tipo de enemigos, para poder
+             * reutilizar los enemigos,he guardados las estadísticas
+             * de estos. Cada vez que termine un combate, indroducimos las estadísticas
+             * guardadas a los enemigos que han entrado en combate.
+             */
+
+           
+            
+           Thread.sleep(500);
+
+        }
+
+        else if (this.tablero.getLaberinto()[coordenadaMover[0]][coordenadaMover[1]] == Square.RECOMPENSA) {
+            this.clearScreen();
+            System.out.print("Recibiendo recompensa");
+            for (int i = 0; i < 4; i++) {
+
+                Thread.sleep(300);
+                System.out.print(".");
+            }
+            this.clearScreen();
+            this.tablero.getJugador().sumarEstadistica();
+            this.tablero.setEscudoInicialPJ(this.tablero.getJugador().getEscudo());
+
+        }
+
+        if (this.tablero.getJugador().getVida() <= 0) {
+            return true;
+        } else
+            return false;
     }
 
     

@@ -18,8 +18,6 @@ public class TableroMecanicaJuego extends Tablero {
     private int escudoInicialPJ;
     private int[] coordenadaPJ = { 0, 0 };
 
-    private int[] estacEnemigoAsesino;
-    private int[] estacEnemigoSoldado;
 
     public TableroMecanicaJuego() {
         this.jugador = new Jugador();
@@ -27,26 +25,10 @@ public class TableroMecanicaJuego extends Tablero {
         this.asesino = new Enemigo("Asesino");
         this.combate = new Combate(this.asesino, this.soldado);
 
-        this.estacEnemigoAsesino = new int[3];
-        this.estacEnemigoSoldado = new int[3];
+     
         wz = new Scanner(System.in);
     }
 
-    public int[] getEstacEnemigoSoldado() {
-        return estacEnemigoSoldado;
-    }
-
-    public void setEstacEnemigoSoldado(int[] estacEnemigoSoldado) {
-        this.estacEnemigoSoldado = estacEnemigoSoldado;
-    }
-
-    public int[] getEstacEnemigoAsesino() {
-        return estacEnemigoAsesino;
-    }
-
-    public void setEstacEnemigoAsesino(int[] estacEnemigo) {
-        this.estacEnemigoAsesino = estacEnemigo;
-    }
 
     public int getEscudoInicialPJ() {
         return escudoInicialPJ;
@@ -180,7 +162,6 @@ public class TableroMecanicaJuego extends Tablero {
     }
 
     public int[] movimientoPJ() throws InterruptedException {
-
         System.out.print("Movimiento(w/a/s/d) :");
         String movimiento = wz.next().toLowerCase();
 
@@ -229,93 +210,7 @@ public class TableroMecanicaJuego extends Tablero {
      * Metodo para cuando el PJ tenga interacciones en la mapa(tocar una pared, un
      * enemigo o una recompensa).
      */
-    public boolean interaccionPJ(int[] coordenadaMover) throws InterruptedException {
-        wz.nextLine();
-        if (this.getLaberinto()[coordenadaMover[0]][coordenadaMover[1]] == Square.SOLDADO) {
-
-            int[] estacEnemigo = this.estacEnemigoSoldado;
-
-            while (true) {
-                clearScreen();
-                System.out.println(this.soldado.toString());
-                this.combate("soldado");
-
-                if (this.jugador.getVida() == 0) {
-                    System.out.println("Te han matado...");
-                    Thread.sleep(1000);
-                    break;
-                } else if (this.soldado.getVida() == 0) {
-                    System.out.println("Has matado a tu enemigo!");
-                    Thread.sleep(1000);
-                    break;
-                }
-                Thread.sleep(500);
-                System.out.print("Teclea cualquer letra para seguir: ");
-                String a = wz.nextLine();
-            }
-            this.soldado.setEstadisticaEnemigo(estacEnemigo);
-
-            Thread.sleep(500);
-
-        } else if (this.getLaberinto()[coordenadaMover[0]][coordenadaMover[1]] == Square.ASESINO) {
-
-            int[] estacEnemigo = this.estacEnemigoAsesino;
-
-            while (true) {
-                clearScreen();
-                System.out.println(this.asesino.toString());
-                this.combate("asesino");
-
-                if (this.jugador.getVida() == 0) {
-                    System.out.println("Te han matado...");
-                    Thread.sleep(1000);
-                    break;
-                } else if (this.asesino.getVida() == 0) {
-                    System.out.println("Has matado a tu enemigo!");
-                    Thread.sleep(1000);
-                    break;
-                }
-                Thread.sleep(500);
-                System.out.print("Teclea cualquer letra para seguir: ");
-                String a = wz.nextLine();
-            }
-            this.asesino.setEstadisticaEnemigo(estacEnemigo);
-
-            System.out.print("Teclea cualquer letra para seguir: ");
-            String a = wz.nextLine();
-
-            /*
-             * como solo he creado un solo objeto para cada tipo de enemigos, para poder
-             * reutilizar los enemigos,he guardados las estadísticas
-             * de estos. Cada vez que termine un combate, indroducimos las estadísticas
-             * guardadas a los enemigos que han entrado en combate.
-             */
-
-           
-            
-           Thread.sleep(500);
-
-        }
-
-        else if (this.getLaberinto()[coordenadaMover[0]][coordenadaMover[1]] == Square.RECOMPENSA) {
-            this.clearScreen();
-            System.out.print("Recibiendo recompensa");
-            for (int i = 0; i < 4; i++) {
-
-                Thread.sleep(300);
-                System.out.print(".");
-            }
-            this.clearScreen();
-            this.getJugador().sumarEstadistica();
-            this.escudoInicialPJ = this.jugador.getEscudo();
-
-        }
-
-        if (this.getJugador().getVida() <= 0) {
-            return true;
-        } else
-            return false;
-    }
+ 
 
     /*
      * Metodo más optimo de examinar las casillas vecinas.
