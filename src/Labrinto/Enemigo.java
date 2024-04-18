@@ -92,14 +92,17 @@ public class Enemigo {
         }
 
         else if (getEscudo() == 0){
-            System.out.println("Le infringistes "+e.getAtaque()/2+" de daño! Aunque lo intentó esquivar...");
-            setVida(this.vida - (e.getAtaque()/2));
+
+            int damageRecibido = e.getAtaque()/2; 
+            if (damageRecibido == 0){damageRecibido = 1;}
+            System.out.println("Le infringistes "+damageRecibido+" de daño! Aunque lo intentó esquivar...");
+            setVida(this.vida - damageRecibido);
         }
 
         }
         else{
             System.out.println("Le infringistes "+e.getAtaque()+" de daño!");
-            setVida(this.vida - e.getAtaque());
+            this.setVida(this.vida - e.getAtaque());
         }
 
     }

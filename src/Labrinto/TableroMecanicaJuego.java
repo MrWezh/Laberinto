@@ -6,8 +6,10 @@ import java.util.Scanner;
 public class TableroMecanicaJuego extends Tablero {
 
     private Jugador jugador;
-    Enemigo soldado;
-    Enemigo asesino;
+    private Enemigo soldado;
+    private Enemigo asesino;
+    private Combate combate;
+
     private int numeroRecompensa;
     private int numeroEnemigos;
     private int numeroSalida;
@@ -23,6 +25,7 @@ public class TableroMecanicaJuego extends Tablero {
         this.jugador = new Jugador();
         this.soldado = new Enemigo("Soldado esqueleto");
         this.asesino = new Enemigo("Asesino");
+        this.combate = new Combate(this.asesino, this.soldado);
 
         this.estacEnemigoAsesino = new int[3];
         this.estacEnemigoSoldado = new int[3];
@@ -227,56 +230,59 @@ public class TableroMecanicaJuego extends Tablero {
      * enemigo o una recompensa).
      */
     public boolean interaccionPJ(int[] coordenadaMover) throws InterruptedException {
-
+        wz.nextLine();
         if (this.getLaberinto()[coordenadaMover[0]][coordenadaMover[1]] == Square.SOLDADO) {
 
             int[] estacEnemigo = this.estacEnemigoSoldado;
 
             while (true) {
-            clearScreen();
-            System.out.println(this.soldado.toString());
+                clearScreen();
+                System.out.println(this.soldado.toString());
                 this.combate("soldado");
 
-                if (this.jugador.getVida() == 0){
+                if (this.jugador.getVida() == 0) {
                     System.out.println("Te han matado...");
                     Thread.sleep(1000);
-                    break;}
-                else if (this.soldado.getVida() == 0){
+                    break;
+                } else if (this.soldado.getVida() == 0) {
                     System.out.println("Has matado a tu enemigo!");
                     Thread.sleep(1000);
                     break;
                 }
-                System.out.print("Teclea cualquer letra para seguir: ");String a = wz.nextLine();
+                Thread.sleep(500);
+                System.out.print("Teclea cualquer letra para seguir: ");
+                String a = wz.nextLine();
             }
             this.soldado.setEstadisticaEnemigo(estacEnemigo);
 
-            
-            System.out.print("Teclea cualquier letra para continuar: ");
-            String a = wz.nextLine();
-
-            // Thread.sleep(2000);
+            Thread.sleep(500);
 
         } else if (this.getLaberinto()[coordenadaMover[0]][coordenadaMover[1]] == Square.ASESINO) {
+
             int[] estacEnemigo = this.estacEnemigoAsesino;
-           
+
             while (true) {
                 clearScreen();
-            System.out.println(this.asesino.toString());
+                System.out.println(this.asesino.toString());
                 this.combate("asesino");
 
-                if (this.jugador.getVida() == 0){
+                if (this.jugador.getVida() == 0) {
                     System.out.println("Te han matado...");
                     Thread.sleep(1000);
-                    break;}
-                else if (this.asesino.getVida() == 0){
+                    break;
+                } else if (this.asesino.getVida() == 0) {
                     System.out.println("Has matado a tu enemigo!");
                     Thread.sleep(1000);
                     break;
                 }
-                this.asesino.setEstadisticaEnemigo(estacEnemigo);
-                
-                System.out.print("Teclea cualquer letra para seguir: ");String a = wz.nextLine();
+                Thread.sleep(500);
+                System.out.print("Teclea cualquer letra para seguir: ");
+                String a = wz.nextLine();
             }
+            this.asesino.setEstadisticaEnemigo(estacEnemigo);
+
+            System.out.print("Teclea cualquer letra para seguir: ");
+            String a = wz.nextLine();
 
             /*
              * como solo he creado un solo objeto para cada tipo de enemigos, para poder
@@ -284,19 +290,17 @@ public class TableroMecanicaJuego extends Tablero {
              * de estos. Cada vez que termine un combate, indroducimos las estadísticas
              * guardadas a los enemigos que han entrado en combate.
              */
-            this.asesino.setEstadisticaEnemigo(estacEnemigo);
 
-            wz.nextLine();
-            System.out.print("Teclea cualquier letra para continuar: ");
-            String a = wz.next();
-            // Thread.sleep(2000);
+           
+            
+           Thread.sleep(500);
 
         }
 
         else if (this.getLaberinto()[coordenadaMover[0]][coordenadaMover[1]] == Square.RECOMPENSA) {
             this.clearScreen();
-            System.out.print("Recibiendo recompensa.");
-            for (int i = 0; i < 6; i++) {
+            System.out.print("Recibiendo recompensa");
+            for (int i = 0; i < 4; i++) {
 
                 Thread.sleep(300);
                 System.out.print(".");
@@ -377,11 +381,11 @@ public class TableroMecanicaJuego extends Tablero {
             System.out.print("║");
             for (int j = 0; j < getLaberinto().length; j++) {
 
-                if (!this.visionPJ[i][j]) {
+                /*if (!this.visionPJ[i][j]) {
                     System.out.print(" # ");
-                }
+                }*/
 
-                else {
+                //else {
                     Square symbol = this.getLaberinto()[i][j];
 
                     switch (symbol) {
@@ -408,7 +412,7 @@ public class TableroMecanicaJuego extends Tablero {
                             System.out.print(" 杀");
                             break;
                     }
-                }
+                //}
             }
             System.out.println("║");
         }
@@ -439,7 +443,6 @@ public class TableroMecanicaJuego extends Tablero {
             case "asesino":
                 eleccionJugador = this.jugador.atacar();
                 eleccionEnemigo = this.asesino.atacar();
-
                 break;
 
             case "soldado":
@@ -494,7 +497,8 @@ public class TableroMecanicaJuego extends Tablero {
 
             case "2":
                 if (eleccioEnemiga.equals("1")) {
-                    if (this.jugador.getEscudo() != 0)System.out.println("Bloqueaste su ataque de espada!");
+                    if (this.jugador.getEscudo() != 0)
+                        System.out.println("Bloqueaste su ataque de espada!");
                     this.jugador.esAtacado(tipo, true, false);
                 } else if (eleccioEnemiga.equals("3")) {
                     System.out.println("No pudistes bloquear sus flechas...");
