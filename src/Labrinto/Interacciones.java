@@ -35,6 +35,7 @@ public class Interacciones {
         this.tablero.getVisionPJ()[0][0] = true;
 
         this.tablero.descubrirCasillas(0, 0);
+
         while (true) {
             
             this.clearScreen();
@@ -42,8 +43,8 @@ public class Interacciones {
 
             // Imprimir la información del jugador, asesino y soldado
             //System.out.println(this.tablero.getCoordenadaPJ()[0] + " " + this.tablero.getCoordenadaPJ()[1]);
-
             this.preguntarDireccionMovimiento();
+
         }
 
     }
@@ -297,9 +298,10 @@ public class Interacciones {
     }
 
     public void preguntarDireccionMovimiento() throws InterruptedException {
+        
         int[] coordenadaMover = this.tablero.movimientoPJ();
         int[] casillaActual = this.tablero.getCoordenadaPJ();
-
+        
         boolean perder = this.interaccionPJ(coordenadaMover);
         if (perder)
             perderPartida();
@@ -316,14 +318,14 @@ public class Interacciones {
         int consumirEnter = this.tablero.getNumeroEnemigos();
 
         if (this.tablero.getLaberinto()[coordenadaMover[0]][coordenadaMover[1]] == Square.SOLDADO) {
-            if (consumirEnter != 0){ wz.nextLine();consumirEnter--;}
+            //if (consumirEnter != 0){ wz.nextLine();consumirEnter--;}
             int[] estacEnemigo = this.tablero.getSoldado().guardarEstacsEnemigo();
 
             while (true) {
                 clearScreen();
-                System.out.println(this.tablero.getSoldado().toString());
-                this.tablero.combate("soldado");
                 
+                this.tablero.combate("soldado");
+              
 
                 if (this.tablero.getJugador().getVida() == 0) {
                     System.out.println("Te han matado...");
@@ -335,14 +337,10 @@ public class Interacciones {
                     break;
                 }
                 System.out.print("Pulsa enter para seguir: "); wz.nextLine();
-                //System.out.print("Teclea cualquer letra para seguir: ");
-                //String a = wz.nextLine();
+            
             }
              
             this.tablero.getSoldado().setEstadisticaEnemigo(estacEnemigo);
-
-            System.out.print("Pulse enter para seguir: ");
-            wz.nextLine();
 
 
         } else if (this.tablero.getLaberinto()[coordenadaMover[0]][coordenadaMover[1]] == Square.ASESINO) {
@@ -351,28 +349,22 @@ public class Interacciones {
 
             while (true) {
                 clearScreen();
-                System.out.println(this.tablero.getAsesino().toString());
+               
                 this.tablero.combate("asesino");
 
                 if (this.tablero.getJugador().getVida() == 0) {
-                    consumirEnter ++; 
                     System.out.println("Te han matado...");
                     Thread.sleep(1000);
                     break;
                 } else if (this.tablero.getAsesino().getVida() == 0) {
-                    consumirEnter ++; 
                     System.out.println("Has matado a tu enemigo!");
                     Thread.sleep(1000);
                     break;
                 }
                 System.out.print("Pulsa enter para seguir: "); wz.nextLine();
-                //System.out.print("Teclea cualquer letra para seguir: ");
-                //String a = wz.nextLine();
+
             }
             this.tablero.getAsesino().setEstadisticaEnemigo(estacEnemigo);
-
-            System.out.print("Pulsa enter para seguir: ");
-            wz.nextLine();
 
             /*
              * como solo he creado un solo objeto para cada tipo de enemigos, para poder

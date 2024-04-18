@@ -8,13 +8,11 @@ public class Enemigo {
     private int vida;
     private int ataque;
     private int escudo;
-    private Random random;
 
     private int[] estadisticaEnemigo;
 
     public Enemigo() {
         this.estadisticaEnemigo = new int[3];
-        this.random = new Random();
 
     }
 

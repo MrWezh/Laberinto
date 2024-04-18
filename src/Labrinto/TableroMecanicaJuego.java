@@ -328,6 +328,7 @@ public class TableroMecanicaJuego extends Tablero {
 
     public void combate(String opcion) {
         // this.clearScreen();
+        System.out.println(this.getAsesino().toString());
         System.out.println(this.jugador.toString());
 
         String eleccionJugador = "";

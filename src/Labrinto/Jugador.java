@@ -12,8 +12,6 @@ public class Jugador {
     private Random random; 
     private Scanner wz; 
 
-    private boolean defender; 
-    
 
     public Jugador() {
         this.random  = new Random();
@@ -58,44 +56,10 @@ public class Jugador {
         this.ataque = ataque;
     }
 
-    /*public boolean atacar(Enemigos e) throws InterruptedException {
-        
-        
-       
-        Thread.sleep(500);
-        System.out.println("---------------------------------------");
-        System.out.println("Infringistes " + this.ataque + " de daño!");
-
-        return e.esAtacado(this);
-
-    }
-
-    public boolean esAtacado(Enemigos e) throws InterruptedException {
-        Thread.sleep(500);
-        // System.out.println("El Protagonista es atacado por el Enemigo!");
-
-        if (this.escudo > 0) {
-            int ataca = getEscudo() - e.getAtaque();
-
-            if (ataca < 0)
-                setVida(getVida() + ataca);
-            setEscudo(ataca);
-        } else if (this.escudo == 0)
-            setVida(getVida() - e.getAtaque());
-
-        if (getVida() == 0)
-            return true;
-        else {
-            System.out.println("Tu vida: " + this.vida);
-            System.out.println("Tu escudo: " + this.escudo);
-            return atacar(e);
-        }
-    }*/
-
     public String atacar(){
         System.out.println("1.Atacar | 2.Defender | 3.Disparar");
-        String opcion = wz.nextLine(); 
-
+        String opcion = wz.next(); 
+        
         return opcion;
         
     }
