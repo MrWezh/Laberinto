@@ -20,11 +20,11 @@ public class Enemigo {
         return estadisticaEnemigo;
     }
 
-    public void setEstadisticaEnemigo(int[] estadisticaEnemigo) {
-        this.estadisticaEnemigo = estadisticaEnemigo;
-        this.vida = estadisticaEnemigo[0];
-        this.ataque = estadisticaEnemigo[1];
-        this.escudo = estadisticaEnemigo[2];
+    public void generalEstacsEnemigo(int[] vida, int[] ataque, int[] escudo) {
+        Random random = new Random();
+        this.vida = random.nextInt(vida[0], vida[1]);
+        this.ataque = random.nextInt(ataque[0], ataque[1]);
+        this.escudo = random.nextInt(escudo[0], escudo[1]);
 
     }
 

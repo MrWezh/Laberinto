@@ -6,8 +6,7 @@ import java.util.Scanner;
 public class TableroMecanicaJuego extends Tablero {
 
     private Jugador jugador;
-    private Enemigo soldado;
-    private Enemigo asesino;
+    private Enemigo enemigo;
     private Combate combate;
 
     private int numeroRecompensa;
@@ -21,9 +20,8 @@ public class TableroMecanicaJuego extends Tablero {
 
     public TableroMecanicaJuego() {
         this.jugador = new Jugador();
-        this.soldado = new Enemigo("Soldado esqueleto");
-        this.asesino = new Enemigo("Asesino");
-        this.combate = new Combate(this.asesino, this.soldado);
+        this.enemigo = new Enemigo("Enemigo");
+        this.combate = new Combate(this.enemigo);
 
      
         wz = new Scanner(System.in);
@@ -62,21 +60,17 @@ public class TableroMecanicaJuego extends Tablero {
         this.jugador = jugador;
     }
 
-    public Enemigo getSoldado() {
-        return soldado;
+   
+
+    public Enemigo getEnemigo() {
+        return enemigo;
     }
 
-    public void setSoldado(Enemigo soldado1) {
-        this.soldado = soldado1;
+
+    public void setEnemigo(Enemigo enemigo) {
+        this.enemigo = enemigo;
     }
 
-    public Enemigo getAsesino() {
-        return asesino;
-    }
-
-    public void setAsesino(Enemigo soldado2) {
-        this.asesino = soldado2;
-    }
 
     public int getNumeroRecompensa() {
         return numeroRecompensa;
@@ -118,10 +112,9 @@ public class TableroMecanicaJuego extends Tablero {
         }
         this.generar(0, 1, Square.RECOMPENSA, numeroRecompensa);
 
-        Square[] enemigo = { Square.ASESINO, Square.SOLDADO };
 
-        this.generar(3, 1, enemigo[0], numeroEnemigos / 2);
-        this.generar(3, 1, enemigo[1], numeroEnemigos / 2);
+        this.generar(3, 1, Square.ENEMIGO, numeroEnemigos);
+        
 
     }
 
@@ -283,7 +276,7 @@ public class TableroMecanicaJuego extends Tablero {
                 //else {
                     Square symbol = this.getLaberinto()[i][j];
 
-                    switch (symbol) {
+                    /*switch (symbol) {
                         case PARED:
                             System.out.print(" ■ ");
                             break;
@@ -306,6 +299,28 @@ public class TableroMecanicaJuego extends Tablero {
                         case ASESINO:
                             System.out.print(" 杀");
                             break;
+                    }*/
+                    switch (symbol) {
+                        case PARED:
+                            System.out.print(" ■ ");
+                            break;
+
+                        case CAMINO:
+                            System.out.print("   ");
+                            break;
+                        case PERSONAJE:
+                            System.out.print(" P ");
+                            break;
+                        case SALIDA:
+                            System.out.print(" []");
+                            break;
+                        case RECOMPENSA:
+                            System.out.print(" ? ");
+                            break;
+                        case ENEMIGO:
+                            System.out.print(" ¥ ");
+                            break;
+                       
                     }
                 //}
             }
@@ -317,8 +332,7 @@ public class TableroMecanicaJuego extends Tablero {
         }
         System.out.println("╝");
 
-        System.out.println(this.asesino.toString());
-        System.out.println(this.soldado.toString());
+        System.out.println(this.enemigo.toString());
     }
 
     private void clearScreen() {
@@ -326,34 +340,29 @@ public class TableroMecanicaJuego extends Tablero {
         System.out.flush();
     }
 
-    public void combate(String opcion) {
+    public void combate() {
         // this.clearScreen();
-        System.out.println(this.getAsesino().toString());
+        System.out.println(this.enemigo.toString());
         System.out.println(this.jugador.toString());
 
         String eleccionJugador = "";
         String eleccionEnemigo = "";
-        Enemigo e = this.asesino;
+        Enemigo e = this.enemigo;
 
-        switch (opcion) {
-            case "asesino":
-                eleccionJugador = this.jugador.atacar();
-                eleccionEnemigo = this.asesino.atacar();
-                break;
+        System.out.println("1.Atacar | 2.Defender | 3.Disparar");
+        eleccionJugador = wz.next();
 
-            case "soldado":
-                eleccionJugador = this.jugador.atacar();
-                eleccionEnemigo = this.soldado.atacar();
-                e = this.soldado;
+        Random random = new Random();
 
-                break;
+        int a = random.nextInt(3)+1;
 
-            default:
-                break;
-        }
-
+        eleccionEnemigo = ""+a;
+        
+        if (eleccionJugador.equals("1")||eleccionJugador.equals("2")||eleccionJugador.equals("3")){
         this.imprimirEleccionCombate(eleccionJugador);
         this.imprimirEleccionCombate(eleccionEnemigo);
+        }
+        
 
         if (eleccionJugador.equals(eleccionEnemigo)) {
             switch (eleccionEnemigo) {

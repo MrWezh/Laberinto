@@ -6,8 +6,7 @@ public enum Square {
     SALIDA,
     
     PERSONAJE,
-    ASESINO,
-    SOLDADO,
+    ENEMIGO,
     RECOMPENSA
 
 
