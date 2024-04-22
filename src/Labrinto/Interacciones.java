@@ -335,7 +335,7 @@ public class Interacciones {
             while (true) {
                 clearScreen();
 
-                this.tablero.combate();
+                this.tablero.getCombate().combate();
                 if (this.consumirEnter == 1){
                     wz.nextLine();
                     this.consumirEnter--;

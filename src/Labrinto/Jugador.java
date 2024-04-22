@@ -64,10 +64,10 @@ public class Jugador {
         
     }
 
-    public void esAtacado(Enemigo e, boolean usarEscudo, boolean esFlecha){
+    public void esAtacado(Enemigo e, boolean usarEscudo){
 
-        if (usarEscudo&&!esFlecha){
-            
+
+        if (usarEscudo){    
             if (escudo > 0){
             int dañoRecibido = this.escudo - 1;
 
@@ -77,21 +77,16 @@ public class Jugador {
              if (getEscudo() == 0){System.out.println("Tu escudo te bloqueo una ultima ataque...");}
             
         }
-
-        else if (getEscudo() == 0){
-            int damageRecibido = e.getAtaque()/2;
-            if(damageRecibido==0) damageRecibido = 1;
-            System.out.println("Recibistes "+damageRecibido+" de daño! Aunque lo intentastes esquivar...");
-            setVida(this.vida - damageRecibido);
-        }
-
-        }
+        
         else{
             System.out.println("Recibistes "+e.getAtaque()+" de daño!");
             setVida(this.vida - e.getAtaque());
-        }
-
-        
+        }   
+    }
+     else {
+        System.out.println("Recibistes "+e.getAtaque()+" de daño!");
+        setVida(this.vida - e.getAtaque());
+     }   
 
     }
 

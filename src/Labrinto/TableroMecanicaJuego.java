@@ -21,11 +21,24 @@ public class TableroMecanicaJuego extends Tablero {
     public TableroMecanicaJuego() {
         this.jugador = new Jugador();
         this.enemigo = new Enemigo("Enemigo");
-        this.combate = new Combate(this.enemigo);
+        this.combate = new Combate(this.enemigo, this.jugador);
 
      
         wz = new Scanner(System.in);
     }
+    
+
+
+    public Combate getCombate() {
+        return combate;
+    }
+
+
+
+    public void setCombate(Combate combate) {
+        this.combate = combate;
+    }
+
 
 
     public int getEscudoInicialPJ() {
@@ -338,121 +351,6 @@ public class TableroMecanicaJuego extends Tablero {
     private void clearScreen() {
         System.out.print("\033[H\033[2J");
         System.out.flush();
-    }
-
-    public void combate() {
-        // this.clearScreen();
-        System.out.println(this.enemigo.toString());
-        System.out.println(this.jugador.toString());
-
-        String eleccionJugador = "";
-        String eleccionEnemigo = "";
-        Enemigo e = this.enemigo;
-
-        System.out.println("1.Atacar | 2.Defender | 3.Disparar");
-        eleccionJugador = wz.next();
-
-        Random random = new Random();
-
-        int a = random.nextInt(3)+1;
-
-        eleccionEnemigo = ""+a;
-        
-        if (eleccionJugador.equals("1")||eleccionJugador.equals("2")||eleccionJugador.equals("3")){
-        this.imprimirEleccionCombate(eleccionJugador);
-        this.imprimirEleccionCombate(eleccionEnemigo);
-        }
-        
-
-        if (eleccionJugador.equals(eleccionEnemigo)) {
-            switch (eleccionEnemigo) {
-                case "1":
-                    System.out.println("Se escucha un brillo sonido causado por el choque vuestras espadas...");
-                    break;
-
-                case "2":
-                    System.out.println("Intercambias las miradas mientras alzais vuestros escudos...");
-                    break;
-
-                case "3":
-                    System.out.println("Ambos habeis esquivado la flecha del otro...");
-                    break;
-                default:
-                    break;
-            }
-        } else {
-            this.situacionesCombate(eleccionJugador, eleccionEnemigo, e);
-        }
-
-    }
-
-    public void situacionesCombate(String eleccionJugador, String eleccioEnemiga, Enemigo tipo) {
-        // 1: artacar; 2: defender; 3: disparar
-
-        switch (eleccionJugador) {
-            case "1":
-                if (eleccioEnemiga.equals("3")) {
-                    System.out.println("Esquivaste su flecha!");
-                    tipo.esAtacado(this.jugador, false, true);
-                } else if (eleccioEnemiga.equals("2")) {
-                    System.out.println("Ha bloqueado tu ataque...");
-                    tipo.esAtacado(this.jugador, true, false);
-                }
-                break;
-
-            case "2":
-                if (eleccioEnemiga.equals("1")) {
-                    if (this.jugador.getEscudo() != 0)
-                        System.out.println("Bloqueaste su ataque de espada!");
-                    this.jugador.esAtacado(tipo, true, false);
-                } else if (eleccioEnemiga.equals("3")) {
-                    System.out.println("No pudistes bloquear sus flechas...");
-                    this.jugador.esAtacado(tipo, false, true);
-                }
-                break;
-            case "3":
-                if (eleccioEnemiga.equals("1")) {
-                    System.out.println("Esquivó tus flechas...");
-                    this.jugador.esAtacado(tipo, false, true);
-                } else if (eleccioEnemiga.equals("2")) {
-                    System.out.println("NO pudo bloquear tus flechas!");
-                    tipo.esAtacado(this.jugador, true, true);
-
-                }
-                break;
-            default:
-                break;
-        }
-
-    }
-
-    public void imprimirEleccionCombate(String opcion) {
-
-        switch (opcion) {
-            case "1":
-                System.out.println();
-                System.out.println("══|>>>>>>>");
-                System.out.println();
-
-                break;
-
-            case "2":
-
-                System.out.println("  ___ ");
-                System.out.println(" | _ |");
-                System.out.println(" | @ |");
-                System.out.println(" \\_-_/");
-                System.out.println();
-
-                break;
-
-            case "3":
-                System.out.println();
-                System.out.println(">>----->");
-                System.out.println();
-            default:
-                break;
-        }
     }
 
 }

@@ -86,10 +86,9 @@ public class Enemigo {
         return eleccionEnemiga;
     }
 
-    public void esAtacado(Jugador e, boolean usarEscudo, boolean esFlecha){
-
-        if (usarEscudo&&!esFlecha){
+    public void esAtacado(Jugador e, boolean usaEscudo){
             
+        if (usaEscudo){
             if (escudo > 0){
             int dañoRecibido = this.escudo -1;
 
@@ -100,20 +99,17 @@ public class Enemigo {
             
         }
 
-        else if (getEscudo() == 0){
-
-            int damageRecibido = e.getAtaque()/2; 
-            if (damageRecibido == 0){damageRecibido = 1;}
-            System.out.println("Le infringistes "+damageRecibido+" de daño! Aunque lo intentó esquivar...");
-            setVida(this.vida - damageRecibido);
-        }
-
-        }
         else{
-            System.out.println("Le infringistes "+e.getAtaque()+" de daño!");
-            this.setVida(this.vida - e.getAtaque());
-        }
 
+            System.out.println("Le infringistes "+e.getAtaque()+" de daño!");
+            setVida(this.vida - e.getAtaque());
+        }
+    }else{
+
+        System.out.println("Le infringistes "+e.getAtaque()+" de daño!");
+            setVida(this.vida - e.getAtaque());
+
+}
     }
 
     @Override
