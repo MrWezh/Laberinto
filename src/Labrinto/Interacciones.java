@@ -247,12 +247,12 @@ public class Interacciones {
 
     public void indroducirNombrePJ() {
         wz.nextLine();
-        System.out.println("-------------------------------------");
 
         System.out.println("*Indroduzca el nombre que tendrá tu PJ:");
+        System.out.println("--------------------------------------");
         String nombre = wz.nextLine();
 
-        System.out.println("-------------------------------------");
+        System.out.println("--------------------------------------");
         System.out.println("¿Estas seguro que tu PJ se llamará " + nombre + "?(y/n)");
         String yesno = wz.next().toLowerCase();
         if (yesno.equals("n")) {

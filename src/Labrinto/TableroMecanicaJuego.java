@@ -297,7 +297,7 @@ public class TableroMecanicaJuego extends Tablero {
                             System.out.print(" ? ");
                             break;
                         case ENEMIGO:
-                            System.out.print(" 兵");
+                            System.out.print(" 鬼");
                             break;
 
                     }
