@@ -12,10 +12,12 @@ public class Interacciones {
     private int[] ataqueEnemigo;
     private int[] escudoEnemigo;
     private int consumirEnter = 1;
+    private NormasDelJuego normas;
 
     public Interacciones() {
         wz = new Scanner(System.in);
         tablero = new TableroMecanicaJuego();
+        this.normas = new NormasDelJuego(); 
         this.vidaEnemigo = new int[2];
         this.ataqueEnemigo = new int[2];
         this.escudoEnemigo = new int[2];
@@ -84,6 +86,9 @@ public class Interacciones {
 
                 break;
             case "2":
+                clearScreen();
+                String a = this.normas.menuNormas();
+                if (a.equals("0"))menuInical();
                 break;
 
             case "0":
@@ -437,7 +442,7 @@ public class Interacciones {
 
     }
 
-    private void clearScreen() {
+    private static void clearScreen() {
         System.out.print("\033[H\033[2J");
         System.out.flush();
     }

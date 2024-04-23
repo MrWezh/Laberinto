@@ -56,6 +56,7 @@ public class Jugador {
         this.ataque = ataque;
     }
 
+
     public String atacar(){
         System.out.println("1.Atacar | 2.Defender | 3.Disparar");
         String opcion = wz.next(); 
@@ -63,6 +64,12 @@ public class Jugador {
         return opcion;
         
     }
+
+    /*
+     * si usa escudo: le quita un punto al escudo independientemente de daño recibido. 
+     * si no usa escudo: recibe todo el daño recibido.
+     * si no le queda escudo, tendrá que esquivar(50 50 de recibir o no daño).
+     */
 
     public void esAtacado(Enemigo e, boolean usarEscudo){
 

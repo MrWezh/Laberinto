@@ -17,29 +17,21 @@ public class TableroMecanicaJuego extends Tablero {
     private int escudoInicialPJ;
     private int[] coordenadaPJ = { 0, 0 };
 
-
     public TableroMecanicaJuego() {
         this.jugador = new Jugador();
         this.enemigo = new Enemigo("Enemigo");
         this.combate = new Combate(this.enemigo, this.jugador);
 
-     
         wz = new Scanner(System.in);
     }
-    
-
 
     public Combate getCombate() {
         return combate;
     }
 
-
-
     public void setCombate(Combate combate) {
         this.combate = combate;
     }
-
-
 
     public int getEscudoInicialPJ() {
         return escudoInicialPJ;
@@ -73,17 +65,13 @@ public class TableroMecanicaJuego extends Tablero {
         this.jugador = jugador;
     }
 
-   
-
     public Enemigo getEnemigo() {
         return enemigo;
     }
 
-
     public void setEnemigo(Enemigo enemigo) {
         this.enemigo = enemigo;
     }
-
 
     public int getNumeroRecompensa() {
         return numeroRecompensa;
@@ -125,9 +113,7 @@ public class TableroMecanicaJuego extends Tablero {
         }
         this.generar(0, 1, Square.RECOMPENSA, numeroRecompensa);
 
-
         this.generar(3, 1, Square.ENEMIGO, numeroEnemigos);
-        
 
     }
 
@@ -166,6 +152,11 @@ public class TableroMecanicaJuego extends Tablero {
         }
 
     }
+
+    /*
+     * Metodo para el movimiento del PJ. si toca pared, printa un mensage si o no
+     * retoerna las coordenadas de su movimiento(la casilla que quiere llegar).
+     */
 
     public int[] movimientoPJ() throws InterruptedException {
         System.out.print("Movimiento(w/a/s/d) :");
@@ -211,12 +202,6 @@ public class TableroMecanicaJuego extends Tablero {
         } else
             return coordenadasMover;
     }
-
-    /*
-     * Metodo para cuando el PJ tenga interacciones en la mapa(tocar una pared, un
-     * enemigo o una recompensa).
-     */
- 
 
     /*
      * Metodo más optimo de examinar las casillas vecinas.
@@ -269,6 +254,11 @@ public class TableroMecanicaJuego extends Tablero {
         }
     }
 
+    /*
+     * El vector visionPJ determina la visión del personaje(PJ), dicha visión será
+     * las casilla vecinas si tomamos el PJ como centro.
+     */
+
     public void print() {
 
         System.out.println(this.jugador.toString());
@@ -282,14 +272,14 @@ public class TableroMecanicaJuego extends Tablero {
             System.out.print("║");
             for (int j = 0; j < getLaberinto().length; j++) {
 
-                /*if (!this.visionPJ[i][j]) {
+                if (!this.visionPJ[i][j]) {
                     System.out.print(" # ");
-                }*/
+                }
 
-                //else {
+                else {
                     Square symbol = this.getLaberinto()[i][j];
 
-                    /*switch (symbol) {
+                    switch (symbol) {
                         case PARED:
                             System.out.print(" ■ ");
                             break;
@@ -306,36 +296,36 @@ public class TableroMecanicaJuego extends Tablero {
                         case RECOMPENSA:
                             System.out.print(" ? ");
                             break;
-                        case SOLDADO:
+                        case ENEMIGO:
                             System.out.print(" 兵");
                             break;
-                        case ASESINO:
-                            System.out.print(" 杀");
-                            break;
-                    }*/
-                    switch (symbol) {
-                        case PARED:
-                            System.out.print(" ■ ");
-                            break;
 
-                        case CAMINO:
-                            System.out.print("   ");
-                            break;
-                        case PERSONAJE:
-                            System.out.print(" P ");
-                            break;
-                        case SALIDA:
-                            System.out.print(" []");
-                            break;
-                        case RECOMPENSA:
-                            System.out.print(" ? ");
-                            break;
-                        case ENEMIGO:
-                            System.out.print(" ¥ ");
-                            break;
-                       
                     }
-                //}
+                    /*
+                     * switch (symbol) {
+                     * case PARED:
+                     * System.out.print(" ■ ");
+                     * break;
+                     * 
+                     * case CAMINO:
+                     * System.out.print("   ");
+                     * break;
+                     * case PERSONAJE:
+                     * System.out.print(" P ");
+                     * break;
+                     * case SALIDA:
+                     * System.out.print(" []");
+                     * break;
+                     * case RECOMPENSA:
+                     * System.out.print(" ? ");
+                     * break;
+                     * case ENEMIGO:
+                     * System.out.print(" ¥ ");
+                     * break;
+                     * 
+                     * }
+                     */
+                }
             }
             System.out.println("║");
         }
@@ -344,8 +334,6 @@ public class TableroMecanicaJuego extends Tablero {
             System.out.print("═");
         }
         System.out.println("╝");
-
-        System.out.println(this.enemigo.toString());
     }
 
     private void clearScreen() {
