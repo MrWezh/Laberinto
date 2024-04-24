@@ -8,22 +8,20 @@ public class Interacciones {
     TableroMecanicaJuego tablero;
     Scanner wz;
     private int puntosDeasignacion;
-    private int[] vidaEnemigo;
-    private int[] ataqueEnemigo;
-    private int[] escudoEnemigo;
+    private int vidaEnemigo;
+    private int ataqueEnemigo;
+    private int escudoEnemigo;
     private int consumirEnter = 1;
     private NormasDelJuego normas;
 
     public Interacciones() {
         wz = new Scanner(System.in);
         tablero = new TableroMecanicaJuego();
-        this.normas = new NormasDelJuego(); 
-        this.vidaEnemigo = new int[2];
-        this.ataqueEnemigo = new int[2];
-        this.escudoEnemigo = new int[2];
+        this.normas = new NormasDelJuego();
+
     }
 
-    public void guardarEstacsEnemigo(int[] vida, int[] ataque, int[] escudo) {
+    public void guardarEstacsEnemigo(int vida, int ataque, int escudo) {
         this.vidaEnemigo = vida;
         this.ataqueEnemigo = ataque;
         this.escudoEnemigo = escudo;
@@ -42,7 +40,7 @@ public class Interacciones {
     }
 
     private void inicialJuego() throws InterruptedException {
-        this.clearScreen();
+        Interacciones.clearScreen();
         this.tablero.GeneralTablero();
         this.tablero.generalEnemigosYRecompensas();
         this.tablero.getVisionPJ()[0][0] = true;
@@ -51,7 +49,7 @@ public class Interacciones {
 
         while (true) {
 
-            this.clearScreen();
+            Interacciones.clearScreen();
             this.tablero.print();
 
             // Imprimir la información del jugador, asesino y soldado
@@ -64,7 +62,7 @@ public class Interacciones {
     }
 
     public void menuInical() throws InterruptedException {
-        this.clearScreen();
+        Interacciones.clearScreen();
 
         System.out.println("╔═════════════════════════════════════╗");
         System.out.println("║1.COMENZAR JUEGO                     ║");
@@ -88,14 +86,15 @@ public class Interacciones {
             case "2":
                 clearScreen();
                 String a = this.normas.menuNormas();
-                if (a.equals("0"))menuInical();
+                if (a.equals("0"))
+                    menuInical();
                 break;
 
             case "0":
                 System.exit(0);
 
             default:
-                this.clearScreen();
+                Interacciones.clearScreen();
                 System.out.println("----------OPCIÓN INCORRECTO------------");
                 menuInical();
                 break;
@@ -104,7 +103,7 @@ public class Interacciones {
 
     private void elegirDificurtad() {
 
-        this.clearScreen();
+        Interacciones.clearScreen();
         System.out.println();
         System.out.println("╔═════════════════════════════════════╗");
         System.out.println("║Elige una dificultad para tu partida:║ ");
@@ -116,21 +115,18 @@ public class Interacciones {
         System.out.println("---------------------------------------");
         System.out.print("INDRODUZCA TU OPCIÓN: ");
         String opcion = wz.next();
-        this.clearScreen();
+        Interacciones.clearScreen();
+        // Limite de vida que tendran los enemigos
 
-        int[] vida = new int[2];
-        int[] ataque = new int[2];
-        int[] escudo = new int[2];
+        int vida = 0;
+        int ataque = 0;
+        int escudo = 0;
         switch (opcion) {
             case "1":
                 this.tablero.setSize(10);
-
-                vida[0] = 5;
-                vida[1] = 10;
-                ataque[0] = 2;
-                ataque[1] = 5;
-                escudo[0] = 5;
-                escudo[1] = 10;
+                vida = 8;
+                ataque = 5;
+                escudo = 4;
 
                 this.tablero.getEnemigo().generalEstacsEnemigo(vida, ataque, escudo);
                 this.guardarEstacsEnemigo(vida, ataque, escudo);
@@ -144,12 +140,9 @@ public class Interacciones {
                 break;
             case "2":
                 this.tablero.setSize(15);
-                vida[0] = 10;
-                vida[1] = 15;
-                ataque[0] = 5;
-                ataque[1] = 10;
-                escudo[0] = 5;
-                escudo[1] = 15;
+                vida = 10;
+                ataque = 7;
+                escudo = 6;
 
                 this.tablero.getEnemigo().generalEstacsEnemigo(vida, ataque, escudo);
                 this.guardarEstacsEnemigo(vida, ataque, escudo);
@@ -163,12 +156,9 @@ public class Interacciones {
                 break;
             case "3":
                 this.tablero.setSize(20);
-                vida[0] = 10;
-                vida[1] = 20;
-                ataque[0] = 5;
-                ataque[1] = 10;
-                escudo[0] = 10;
-                escudo[1] = 20;
+                vida = 20;
+                ataque = 9;
+                escudo = 10;
 
                 this.tablero.getEnemigo().generalEstacsEnemigo(vida, ataque, escudo);
                 this.guardarEstacsEnemigo(vida, ataque, escudo);
@@ -180,7 +170,7 @@ public class Interacciones {
 
                 break;
             default:
-                this.clearScreen();
+                Interacciones.clearScreen();
                 System.out.println("----------OPCIÓN INCORRECTO------------");
                 elegirDificurtad();
                 break;
@@ -189,7 +179,7 @@ public class Interacciones {
     }
 
     private void crearPersonaje() {
-        this.clearScreen();
+        Interacciones.clearScreen();
         int guardarPuntosDeAsignacion = this.puntosDeasignacion;
 
         int vida = this.indroducirVidaAtaqueEscudoPJ("vida");
@@ -236,13 +226,13 @@ public class Interacciones {
                 break;
             case "n":
                 this.puntosDeasignacion = guardarPuntosDeAsignacion;
-                this.clearScreen();
+                Interacciones.clearScreen();
                 crearPersonaje();
                 break;
 
         }
 
-        this.clearScreen();
+        Interacciones.clearScreen();
     }
 
     public void indroducirNombrePJ() {
@@ -341,11 +331,10 @@ public class Interacciones {
                 clearScreen();
 
                 this.tablero.getCombate().combate();
-                if (this.consumirEnter == 1){
+                if (this.consumirEnter == 1) {
                     wz.nextLine();
                     this.consumirEnter--;
                 }
-               
 
                 if (this.tablero.getJugador().getVida() == 0) {
                     System.out.println("Te han matado...");
@@ -370,14 +359,14 @@ public class Interacciones {
         }
 
         else if (this.tablero.getLaberinto()[coordenadaMover[0]][coordenadaMover[1]] == Square.RECOMPENSA) {
-            this.clearScreen();
+            Interacciones.clearScreen();
             System.out.print("Recibiendo recompensa");
             for (int i = 0; i < 4; i++) {
 
                 Thread.sleep(300);
                 System.out.print(".");
             }
-            this.clearScreen();
+            Interacciones.clearScreen();
             this.tablero.getJugador().sumarEstadistica();
             this.tablero.setEscudoInicialPJ(this.tablero.getJugador().getEscudo());
 
@@ -390,7 +379,7 @@ public class Interacciones {
     }
 
     public void ganarPartida() throws InterruptedException {
-        this.clearScreen();
+        Interacciones.clearScreen();
         System.out.println(
                 "           _                    _       _     _            _ \n" +
                         "          | |                  (_)     (_)   | |          | |\n" +
@@ -409,7 +398,7 @@ public class Interacciones {
         } else if (opcion.equals("n"))
             System.exit(0);
         else {
-            this.clearScreen();
+            Interacciones.clearScreen();
             System.out.println("----------OPCIÓN INCORRECTO------------");
             ganarPartida();
         }
@@ -435,7 +424,7 @@ public class Interacciones {
             System.exit(0);
 
         else {
-            this.clearScreen();
+            Interacciones.clearScreen();
             System.out.println("----------OPCIÓN INCORRECTO------------");
             perderPartida();
         }

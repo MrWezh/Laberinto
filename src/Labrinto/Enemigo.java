@@ -20,11 +20,24 @@ public class Enemigo {
         return estadisticaEnemigo;
     }
 
-    public void generalEstacsEnemigo(int[] vida, int[] ataque, int[] escudo) {
+    public void generalEstacsEnemigo(int vida, int ataque, int escudo) {
         Random random = new Random();
-        this.vida = random.nextInt(vida[0], vida[1]);
-        this.ataque = random.nextInt(ataque[0], ataque[1]);
-        this.escudo = random.nextInt(escudo[0], escudo[1]);
+        for (int i = 0; i < 1; i++){
+            this.vida = random.nextInt(vida);
+            if (this.vida < 5) i--;
+        }
+
+        for (int i = 0; i < 1; i++){
+        this.ataque = random.nextInt(ataque);
+            if (this.vida < 2) i--;
+        } 
+        
+        for (int i = 0; i < 1; i++){
+        this.escudo = random.nextInt( escudo);
+            if (this.vida < 5) i--;
+        }
+
+
 
     }
 
