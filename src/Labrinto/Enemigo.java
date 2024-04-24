@@ -29,12 +29,12 @@ public class Enemigo {
 
         for (int i = 0; i < 1; i++){
         this.ataque = random.nextInt(ataque);
-            if (this.vida < 2) i--;
+            if (this.ataque < 2) i--;
         } 
         
         for (int i = 0; i < 1; i++){
         this.escudo = random.nextInt( escudo);
-            if (this.vida < 5) i--;
+            if (this.escudo < 2) i--;
         }
 
 
