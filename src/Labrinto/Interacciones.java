@@ -147,7 +147,7 @@ public class Interacciones {
                 this.tablero.getEnemigo().generalEstacsEnemigo(vida, ataque, escudo);
                 this.guardarEstacsEnemigo(vida, ataque, escudo);
 
-                this.puntosDeasignacion = 10;
+                this.puntosDeasignacion = 15;
 
                 this.tablero.setNumeroEnemigos(14);
                 this.tablero.setNumeroRecompensa(14);
@@ -162,7 +162,7 @@ public class Interacciones {
 
                 this.tablero.getEnemigo().generalEstacsEnemigo(vida, ataque, escudo);
                 this.guardarEstacsEnemigo(vida, ataque, escudo);
-                this.puntosDeasignacion = 15;
+                this.puntosDeasignacion = 20;
 
                 this.tablero.setNumeroEnemigos(20);
                 this.tablero.setNumeroRecompensa(20);
@@ -437,6 +437,7 @@ public class Interacciones {
     }
 
     public void reset() throws InterruptedException {
+        this.consumirEnter = 1; 
         this.tablero.getLaberinto()[this.tablero.getCoordenadaPJ()[0]][this.tablero
                 .getCoordenadaPJ()[1]] = Square.CAMINO;
         int[] e = { 0, 0 };

@@ -23,17 +23,17 @@ public class Enemigo {
     public void generalEstacsEnemigo(int vida, int ataque, int escudo) {
         Random random = new Random();
         for (int i = 0; i < 1; i++){
-            this.vida = random.nextInt(vida);
+            this.vida = random.nextInt(vida)+1;
             if (this.vida < 5) i--;
         }
 
         for (int i = 0; i < 1; i++){
-        this.ataque = random.nextInt(ataque);
+        this.ataque = random.nextInt(ataque)+1;
             if (this.ataque < 2) i--;
         } 
         
         for (int i = 0; i < 1; i++){
-        this.escudo = random.nextInt( escudo);
+        this.escudo = random.nextInt( escudo)+1;
             if (this.escudo < 2) i--;
         }
 

@@ -24,8 +24,7 @@ public class Combate {
         String eleccionEnemigo = "";
         Enemigo e = this.enemigo;
 
-        System.out.println("1.Atacar | 2.Defender | 3.Disparar");
-        eleccionJugador = wz.next();
+        eleccionJugador = this.jugador.atacar();
 
         Random random = new Random();
 
